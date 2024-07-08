@@ -6,7 +6,7 @@ env:
 phases:
   install:
     runtime-versions:
-      nodejs: 18
+      nodejs: 20
     commands:
       - echo installing API dependencies for survey-service
       - npm install -g serverless@2.52.1
@@ -23,6 +23,6 @@ phases:
     commands:
       - export AWS_ACCESS_KEY_ID=$KEY
       - export AWS_SECRET_ACCESS_KEY=$VALUE
-      - echo deploying APIs for happy-app-ms-survey-service
+      - echo deploying APIs for happ-ms-survey-service
       - serverless deploy -s dev
-      - echo finished deploying happy-app-ms-survey-service
+      - echo finished deploying happ-ms-survey-service
