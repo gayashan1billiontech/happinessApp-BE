@@ -1,0 +1,28 @@
+version: 0.1
+
+env:
+  environment: "dev"
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo installing API dependencies for survey-service
+      - npm install -g serverless@2.52.1
+      - echo finished installing API dependencies
+      - echo copy libs files to module directory
+      - cp -r libs survey-service
+      - echo finished copying libs files to module directory
+      - sh libs/dependencies.sh
+      - cd survey-service
+      - echo installing survey-service API dependencies
+      - npm install --silent
+      - echo finished installing survey-service API dependencies
+  build:
+    commands:
+      - export AWS_ACCESS_KEY_ID=$KEY
+      - export AWS_SECRET_ACCESS_KEY=$VALUE
+      - echo deploying APIs for happy-app-ms-survey-service
+      - serverless deploy -s dev
+      - echo finished deploying happy-app-ms-survey-service
