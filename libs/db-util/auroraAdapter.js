@@ -1,5 +1,4 @@
-
-import { helpers } from '../../libs';
+const helpers = require("./helpers");
 
 const { AURORA__DB_CLUSTER_ID, ENV_ID, REGION } = process.env;
 
@@ -76,9 +75,6 @@ const criteriaBuilder = {
 // generate INSERT query and return string sql query and query parameters
 const generateInsertQuery = (tableName, data) => {
   if (typeof data === 'object' && data !== null) {
-    // const now = utilsHelper.convertDate(utilsHelper.getDateTime(), 'MM/DD/YYYY, h:m:s A', 'YYYY-MM-DD HH:MM:SS');
-    // data.createdAt = now;
-    // data.updatedAt = now;
 
     data = Object.entries(data).reduce(
       (a, [k, v]) =>
@@ -101,14 +97,6 @@ const generateInsertQuery = (tableName, data) => {
 
 // generate Batch INSERT query and return string sql query and query parameters
 const generateBulkInsertQuery = (tableName, columns, data) => {
-  /* const now = utilsHelper.convertDate(
-    utilsHelper.getDateTime(),
-    "MM/DD/YYYY, h:m:s A",
-    "YYYY-MM-DD HH:MM:SS"
-  );
-  columns.createdAt = now;
-  columns.updatedAt = now; */
-
   columns = columns.filter((element) => element !== undefined);
 
   const sql = `INSERT INTO ${tableName} (${[...columns]}) VALUES (${[...columns.map((e) => ':'.concat(e))]})`;
@@ -282,7 +270,7 @@ const _transactions = {
   commit() {},
 };
 
-export default {
+module.exports = {
   dataApiClient: {
     insert: (tableName, data) => _insert(tableName, data),
     insertBulk: (tableName, columns, data) => _insertBulk(tableName, columns, data),

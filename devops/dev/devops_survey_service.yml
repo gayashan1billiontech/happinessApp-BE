@@ -9,7 +9,7 @@ phases:
       nodejs: 20
     commands:
       - echo installing API dependencies for survey-service
-      - npm install -g serverless@2.52.1
+      - npm install -g serverless@3.39.0
       - echo finished installing API dependencies
       - echo copy libs files to module directory
       - cp -r libs survey-service
