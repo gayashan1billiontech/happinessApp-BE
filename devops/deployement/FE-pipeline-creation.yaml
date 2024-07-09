@@ -296,10 +296,6 @@ Resources:
                 ImagePullCredentialsType: "CODEBUILD"
                 PrivilegedMode: false
                 Type: "LINUX_CONTAINER"
-                EnvironmentVariables:
-                    - Name: NPM_TOKEN
-                      Type: PLAINTEXT
-                      Value: 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
             ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-frontEnd-service-${AWS::Region}-role"
             TimeoutInMinutes: 60
             QueuedTimeoutInMinutes: 480
