@@ -860,10 +860,10 @@ Resources:
                     RunOrder: 1
 
               - 
-                Name: "Manual Approval"
+                Name: "Manual_Approval"
                 Actions: 
                   - 
-                    Name: "Manual Approval"
+                    Name: "Manual_Approval"
                     ActionTypeId: 
                         Category: "Approval"
                         Owner: "AWS"
