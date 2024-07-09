@@ -1,0 +1,28 @@
+version: 0.1
+
+env:
+  environment: "dev"
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - echo installing API dependencies for notification-service
+      - npm install -g serverless@3.39.0
+      - echo finished installing API dependencies
+      - echo copy libs files to module directory
+      - cp -r libs notification-service
+      - echo finished copying libs files to module directory
+      - sh libs/dependencies.sh
+      - cd notification-service
+      - echo installing notification-service API dependencies
+      - npm install --silent
+      - echo finished installing notification-service API dependencies
+  build:
+    commands:
+      - export AWS_ACCESS_KEY_ID=$KEY
+      - export AWS_SECRET_ACCESS_KEY=$VALUE
+      - echo deploying APIs for happ-ms-notification-service
+      - serverless deploy -s dev
+      - echo finished deploying happ-ms-notification-service

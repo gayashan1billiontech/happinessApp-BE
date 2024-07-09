@@ -1,0 +1,402 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "create venus frontend pipeline"
+Resources:
+#start policy creation
+    AWSCodePipelineServicePolicy:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "AWSCodePipelineServiceRole-${AWS::Region}-happ-frontEnd"
+            Path: "/service-role/"
+            PolicyDocument: |
+                {
+                    "Statement": [
+                        {
+                            "Action": [
+                                "iam:PassRole"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow",
+                            "Condition": {
+                                "StringEqualsIfExists": {
+                                    "iam:PassedToService": [
+                                        "cloudformation.amazonaws.com",
+                                        "elasticbeanstalk.amazonaws.com",
+                                        "ec2.amazonaws.com",
+                                        "ecs-tasks.amazonaws.com"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "Action": [
+                                "codecommit:CancelUploadArchive",
+                                "codecommit:GetBranch",
+                                "codecommit:GetCommit",
+                                "codecommit:GetUploadArchiveStatus",
+                                "codecommit:UploadArchive"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow"
+                        },
+                        {
+                            "Action": [
+                                "codedeploy:CreateDeployment",
+                                "codedeploy:GetApplication",
+                                "codedeploy:GetApplicationRevision",
+                                "codedeploy:GetDeployment",
+                                "codedeploy:GetDeploymentConfig",
+                                "codedeploy:RegisterApplicationRevision"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow"
+                        },
+                        {
+                            "Action": [
+                                "codestar-connections:UseConnection"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow"
+                        },
+                        {
+                            "Action": [
+                                "elasticbeanstalk:*",
+                                "ec2:*",
+                                "elasticloadbalancing:*",
+                                "autoscaling:*",
+                                "cloudwatch:*",
+                                "s3:*",
+                                "sns:*",
+                                "cloudformation:*",
+                                "rds:*",
+                                "sqs:*",
+                                "ecs:*"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow"
+                        },
+                        {
+                            "Action": [
+                                "lambda:InvokeFunction",
+                                "lambda:ListFunctions"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow"
+                        },
+                        {
+                            "Action": [
+                                "opsworks:CreateDeployment",
+                                "opsworks:DescribeApps",
+                                "opsworks:DescribeCommands",
+                                "opsworks:DescribeDeployments",
+                                "opsworks:DescribeInstances",
+                                "opsworks:DescribeStacks",
+                                "opsworks:UpdateApp",
+                                "opsworks:UpdateStack"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow"
+                        },
+                        {
+                            "Action": [
+                                "cloudformation:CreateStack",
+                                "cloudformation:DeleteStack",
+                                "cloudformation:DescribeStacks",
+                                "cloudformation:UpdateStack",
+                                "cloudformation:CreateChangeSet",
+                                "cloudformation:DeleteChangeSet",
+                                "cloudformation:DescribeChangeSet",
+                                "cloudformation:ExecuteChangeSet",
+                                "cloudformation:SetStackPolicy",
+                                "cloudformation:ValidateTemplate"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow"
+                        },
+                        {
+                            "Action": [
+                                "codebuild:BatchGetBuilds",
+                                "codebuild:StartBuild"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "devicefarm:ListProjects",
+                                "devicefarm:ListDevicePools",
+                                "devicefarm:GetRun",
+                                "devicefarm:GetUpload",
+                                "devicefarm:CreateUpload",
+                                "devicefarm:ScheduleRun"
+                            ],
+                            "Resource": "*"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "servicecatalog:ListProvisioningArtifacts",
+                                "servicecatalog:CreateProvisioningArtifact",
+                                "servicecatalog:DescribeProvisioningArtifact",
+                                "servicecatalog:DeleteProvisioningArtifact",
+                                "servicecatalog:UpdateProduct"
+                            ],
+                            "Resource": "*"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "cloudformation:ValidateTemplate"
+                            ],
+                            "Resource": "*"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "ecr:DescribeImages"
+                            ],
+                            "Resource": "*"
+                        }
+                    ],
+                    "Version": "2012-10-17"
+                }
+    
+    CodeBuildCloudWatchLogsHappFrontend:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-frontEnd-${AWS::Region}"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_frontEnd",
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_frontEnd:*"
+                            ],
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ]
+                        }
+                    ]
+                }
+
+    CodeBuildBaseHappFrontend:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-frontEnd-${AWS::Region}"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-frontEnd",
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-frontEnd:*"
+                            ],
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:s3:::codepipeline-${AWS::Region}-*"
+                            ],
+                            "Action": [
+                                "s3:PutObject",
+                                "s3:GetObject",
+                                "s3:GetObjectVersion",
+                                "s3:GetBucketAcl",
+                                "s3:GetBucketLocation"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "codebuild:CreateReportGroup",
+                                "codebuild:CreateReport",
+                                "codebuild:UpdateReport",
+                                "codebuild:BatchPutTestCases"
+                            ],
+                            "Resource": [
+                                "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/happ-frontEnd-*"
+                            ]
+                        }
+                    ]
+                }
+ 
+#end policy creation
+
+#start role creation
+
+# if we need to create some resource after created another one we can use DependsOn key
+# and need to set dependent resource name
+
+    AWSCodePipelineServiceRole:
+        Type: "AWS::IAM::Role"
+        DependsOn:
+          - AWSCodePipelineServicePolicy
+        Properties:
+            Path: "/service-role/"
+            RoleName: !Sub "AWSCodePipelineServiceRole-${AWS::Region}-happ-frontEnd"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"codepipeline.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - !Ref 'AWSCodePipelineServicePolicy'
+
+    CodebuildFrontendRole:
+        Type: "AWS::IAM::Role"
+        DependsOn:
+          - CodeBuildCloudWatchLogsHappFrontend
+          - CodeBuildBaseHappFrontend
+        Properties:
+            Path: "/service-role/"
+            RoleName: !Sub "codebuild-happ-frontEnd-service-${AWS::Region}-role"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"codebuild.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - "arn:aws:iam::aws:policy/AdministratorAccess"
+              - !Ref "CodeBuildCloudWatchLogsHappFrontend"
+              - !Ref "CodeBuildBaseHappFrontend"
+
+#end role creation
+    
+#start codeBuild creation
+
+# need to set ServiceRole correctly, refer role that created to codeBuild service
+    CodeBuildProject:
+        Type: "AWS::CodeBuild::Project"
+        DependsOn:
+          - CodebuildFrontendRole
+        Properties:
+            Name: "happ-frontEnd"
+            Source: 
+                BuildSpec: "devops/dev/devops_frontend.yml"
+                InsecureSsl: false
+                Type: "CODEPIPELINE"
+            Artifacts: 
+                EncryptionDisabled: false
+                Name: "happ-frontEnd"
+                Packaging: "NONE"
+                Type: "CODEPIPELINE"
+            Cache: 
+                Type: "NO_CACHE"
+            Environment: 
+                ComputeType: "BUILD_GENERAL1_SMALL"
+                Image: "aws/codebuild/standard:5.0"
+                ImagePullCredentialsType: "CODEBUILD"
+                PrivilegedMode: false
+                Type: "LINUX_CONTAINER"
+                EnvironmentVariables:
+                    - Name: NPM_TOKEN
+                      Type: PLAINTEXT
+                      Value: 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
+            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-frontEnd-service-${AWS::Region}-role"
+            TimeoutInMinutes: 60
+            QueuedTimeoutInMinutes: 480
+            EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
+            BadgeEnabled: false
+            LogsConfig: 
+                CloudWatchLogs: 
+                    Status: "ENABLED"
+                    GroupName: "happ_frontEnd"
+                S3Logs: 
+                    Status: "DISABLED"
+                    EncryptionDisabled: false
+
+#end codeBuild creation
+
+#start s3 bucket creation
+
+#this is for upload pipeline stack
+#we can use any name
+    S3Bucket:
+        Type: "AWS::S3::Bucket"
+        Properties:
+            BucketName: !Sub "codepipeline-${AWS::Region}-happ-fe-v1-15052022"
+#end s3 bucket creation
+
+#start pipeline creation
+# Generate token like this:
+# GH Link: https://github.com/settings/tokens
+    CodePipelinePipeline:
+        Type: "AWS::CodePipeline::Pipeline"
+        DependsOn:
+          - AWSCodePipelineServiceRole
+          - S3Bucket
+        Properties:
+            Name: "happ-frontEnd"
+            RoleArn: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/AWSCodePipelineServiceRole-${AWS::Region}-happ-frontEnd"
+            ArtifactStore: 
+                Location: !Ref "S3Bucket"
+                Type: "S3"
+            Stages: 
+              - 
+                Name: "Source"
+                Actions: 
+                  - 
+                    Name: "Source"
+                    ActionTypeId: 
+                        Category: "Source"
+                        Owner: "ThirdParty"
+                        Provider: "GitHub"
+                        Version: "1"
+                    Configuration: 
+                        Branch: "dev"
+                        OAuthToken: "{{resolve:secretsmanager:GitHubPersonalAccessToken:SecretString:GitHubPersonalAccessToken::}}"
+                        Owner: "happ-developer"
+                        PollForSourceChanges: "false"
+                        Repo: "happ"
+                    OutputArtifacts: 
+                      - 
+                        Name: "SourceArtifact"
+                    Region: !Ref AWS::Region
+                    Namespace: "SourceVariables"
+                    RunOrder: 1
+              - 
+                Name: "Manual Approval"
+                Actions: 
+                  - 
+                    Name: "Manual Approval"
+                    ActionTypeId: 
+                        Category: "Approval"
+                        Owner: "AWS"
+                        Provider: "Manual"
+                        Version: "1"
+                    RunOrder: 1
+              - 
+                Name: "Build"
+                Actions: 
+                  - 
+                    Name: "Build"
+                    ActionTypeId: 
+                        Category: "Build"
+                        Owner: "AWS"
+                        Provider: "CodeBuild"
+                        Version: "1"
+                    Configuration: 
+                        ProjectName: "happ-frontEnd"
+                    InputArtifacts: 
+                      - 
+                        Name: "SourceArtifact"
+                    OutputArtifacts: 
+                      - 
+                        Name: "BuildArtifact"
+                    Region: !Ref AWS::Region
+                    Namespace: "BuildVariables"
+                    RunOrder: 1
+#end pipeline creation
+
+
+
+    
+    

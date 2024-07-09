@@ -1,0 +1,21 @@
+version: 0.1
+
+env:
+  environment: "dev"
+
+phases:
+  install:
+    commands:
+      - echo building happ front end application
+      - cd web
+  build:
+    commands:
+      - echo build and copy files to S3 bucket
+      - npm install
+      - npm run build:dev
+      - aws s3 sync --delete build/ s3://happiness-app.net --exclude "*.pdf" --exclude "*.mp4" --exclude "*.PDF"
+      - echo Finished copied to s3 bucket
+  # post_build:
+  #   commands:
+  #     - aws cloudfront create-invalidation --distribution-id E1SJ64QD4D25 --paths '/*'
+  #     - echo Finished cloudfront invalidation

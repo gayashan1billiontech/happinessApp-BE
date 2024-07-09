@@ -1,0 +1,968 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "create happiness app backend pipeline"
+Resources:
+#start policy creation
+    AWSCodePipelineServicePolicy:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "AWSCodePipelineServicePolicy-${AWS::Region}-happ-backend"
+            Path: "/service-role/"
+            PolicyDocument: |
+                {
+                    "Statement": [
+                        {
+                            "Action": [
+                                "iam:PassRole"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow",
+                            "Condition": {
+                                "StringEqualsIfExists": {
+                                    "iam:PassedToService": [
+                                        "cloudformation.amazonaws.com",
+                                        "elasticbeanstalk.amazonaws.com",
+                                        "ec2.amazonaws.com",
+                                        "ecs-tasks.amazonaws.com"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "Action": [
+                                "codecommit:CancelUploadArchive",
+                                "codecommit:GetBranch",
+                                "codecommit:GetCommit",
+                                "codecommit:GetUploadArchiveStatus",
+                                "codecommit:UploadArchive"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow"
+                        },
+                        {
+                            "Action": [
+                                "codedeploy:CreateDeployment",
+                                "codedeploy:GetApplication",
+                                "codedeploy:GetApplicationRevision",
+                                "codedeploy:GetDeployment",
+                                "codedeploy:GetDeploymentConfig",
+                                "codedeploy:RegisterApplicationRevision"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow"
+                        },
+                        {
+                            "Action": [
+                                "codestar-connections:UseConnection"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow"
+                        },
+                        {
+                            "Action": [
+                                "elasticbeanstalk:*",
+                                "ec2:*",
+                                "elasticloadbalancing:*",
+                                "autoscaling:*",
+                                "cloudwatch:*",
+                                "s3:*",
+                                "sns:*",
+                                "cloudformation:*",
+                                "rds:*",
+                                "sqs:*",
+                                "ecs:*"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow"
+                        },
+                        {
+                            "Action": [
+                                "lambda:InvokeFunction",
+                                "lambda:ListFunctions"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow"
+                        },
+                        {
+                            "Action": [
+                                "opsworks:CreateDeployment",
+                                "opsworks:DescribeApps",
+                                "opsworks:DescribeCommands",
+                                "opsworks:DescribeDeployments",
+                                "opsworks:DescribeInstances",
+                                "opsworks:DescribeStacks",
+                                "opsworks:UpdateApp",
+                                "opsworks:UpdateStack"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow"
+                        },
+                        {
+                            "Action": [
+                                "cloudformation:CreateStack",
+                                "cloudformation:DeleteStack",
+                                "cloudformation:DescribeStacks",
+                                "cloudformation:UpdateStack",
+                                "cloudformation:CreateChangeSet",
+                                "cloudformation:DeleteChangeSet",
+                                "cloudformation:DescribeChangeSet",
+                                "cloudformation:ExecuteChangeSet",
+                                "cloudformation:SetStackPolicy",
+                                "cloudformation:ValidateTemplate"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow"
+                        },
+                        {
+                            "Action": [
+                                "codebuild:BatchGetBuilds",
+                                "codebuild:StartBuild"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "devicefarm:ListProjects",
+                                "devicefarm:ListDevicePools",
+                                "devicefarm:GetRun",
+                                "devicefarm:GetUpload",
+                                "devicefarm:CreateUpload",
+                                "devicefarm:ScheduleRun"
+                            ],
+                            "Resource": "*"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "servicecatalog:ListProvisioningArtifacts",
+                                "servicecatalog:CreateProvisioningArtifact",
+                                "servicecatalog:DescribeProvisioningArtifact",
+                                "servicecatalog:DeleteProvisioningArtifact",
+                                "servicecatalog:UpdateProduct"
+                            ],
+                            "Resource": "*"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "cloudformation:ValidateTemplate"
+                            ],
+                            "Resource": "*"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "ecr:DescribeImages"
+                            ],
+                            "Resource": "*"
+                        }
+                    ],
+                    "Version": "2012-10-17"
+                }
+    #start cloudwatch policy creation
+    CodeBuildCloudWatchLogsPolicyUser:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-app-user-${AWS::Region}"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_app_user_microservice",
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_app_user_microservice:*"
+                            ],
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ]
+                        }
+                    ]
+                }
+
+    CodeBuildCloudWatchLogsPolicyUserAdmin:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-admin-user-${AWS::Region}"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_admin_user_microservice",
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_admin_user_microservice:*"
+                            ],
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ]
+                        }
+                    ]
+                }
+
+    CodeBuildCloudWatchLogsNotifications:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-notifications-${AWS::Region}"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_notifications_microservice",
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_notifications_microservice:*"
+                            ],
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ]
+                        }
+                    ]
+                }
+
+    CodeBuildCloudWatchLogsPolicyResourceCreation:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-resource-creation-${AWS::Region}"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_resources_microservice",
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_resources_microservice:*"
+                            ],
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ]
+                        }
+                    ]
+                }
+
+    CodeBuildCloudWatchLogsPolicySurvey:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-survey-${AWS::Region}"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_survey_microservice",
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_survey_microservice:*"
+                            ],
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ]
+                        }
+                    ]
+                }
+    
+    CodeBuildBasePolicyUser:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-app-user-${AWS::Region}"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-app-user",
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-app-user:*"
+                            ],
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:s3:::codepipeline-${AWS::Region}-*"
+                            ],
+                            "Action": [
+                                "s3:PutObject",
+                                "s3:GetObject",
+                                "s3:GetObjectVersion",
+                                "s3:GetBucketAcl",
+                                "s3:GetBucketLocation"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "codebuild:CreateReportGroup",
+                                "codebuild:CreateReport",
+                                "codebuild:UpdateReport",
+                                "codebuild:BatchPutTestCases"
+                            ],
+                            "Resource": [
+                                "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/happ-app-user-*"
+                            ]
+                        }
+                    ]
+                }
+    
+    CodeBuildBasePolicyUserAdmin:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-admin-user-${AWS::Region}"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-admin-user",
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-admin-user:*"
+                            ],
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:s3:::codepipeline-${AWS::Region}-*"
+                            ],
+                            "Action": [
+                                "s3:PutObject",
+                                "s3:GetObject",
+                                "s3:GetObjectVersion",
+                                "s3:GetBucketAcl",
+                                "s3:GetBucketLocation"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "codebuild:CreateReportGroup",
+                                "codebuild:CreateReport",
+                                "codebuild:UpdateReport",
+                                "codebuild:BatchPutTestCases"
+                            ],
+                            "Resource": [
+                                "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/happ-admin-user-*"
+                            ]
+                        }
+                    ]
+                }
+    
+    CodeBuildBasePolicyNotifications:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-notifications-${AWS::Region}"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-notifications-microservise",
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-notifications-microservise:*"
+                            ],
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:s3:::codepipeline-${AWS::Region}-*"
+                            ],
+                            "Action": [
+                                "s3:PutObject",
+                                "s3:GetObject",
+                                "s3:GetObjectVersion",
+                                "s3:GetBucketAcl",
+                                "s3:GetBucketLocation"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "codebuild:CreateReportGroup",
+                                "codebuild:CreateReport",
+                                "codebuild:UpdateReport",
+                                "codebuild:BatchPutTestCases"
+                            ],
+                            "Resource": [
+                                "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/happ-notifications-*"
+                            ]
+                        }
+                    ]
+                }
+
+    CodeBuildBasePolicyResourceCreation:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-resources-${AWS::Region}"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-resources",
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-resources:*"
+                            ],
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:s3:::codepipeline-${AWS::Region}-*"
+                            ],
+                            "Action": [
+                                "s3:PutObject",
+                                "s3:GetObject",
+                                "s3:GetObjectVersion",
+                                "s3:GetBucketAcl",
+                                "s3:GetBucketLocation"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "codebuild:CreateReportGroup",
+                                "codebuild:CreateReport",
+                                "codebuild:UpdateReport",
+                                "codebuild:BatchPutTestCases"
+                            ],
+                            "Resource": [
+                                "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/happ-resources-*"
+                            ]
+                        }
+                    ]
+                }
+    
+    CodeBuildBasePolicySurvey:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-survey-${AWS::Region}"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/tpip-prerequisite",
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/tpip-prerequisite:*"
+                            ],
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "arn:aws:s3:::codepipeline-${AWS::Region}-*"
+                            ],
+                            "Action": [
+                                "s3:PutObject",
+                                "s3:GetObject",
+                                "s3:GetObjectVersion",
+                                "s3:GetBucketAcl",
+                                "s3:GetBucketLocation"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "codebuild:CreateReportGroup",
+                                "codebuild:CreateReport",
+                                "codebuild:UpdateReport",
+                                "codebuild:BatchPutTestCases"
+                            ],
+                            "Resource": [
+                                "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/tpip-prerequisite-*"
+                            ]
+                        }
+                    ]
+                }
+
+    
+#end policy creation
+
+#start role creation
+
+# if we need to create some resource after created another one we can use DependsOn key
+# and need to set dependent resource name
+
+    AWSCodePipelineServiceRole:
+        Type: "AWS::IAM::Role"
+        DependsOn:
+          - AWSCodePipelineServicePolicy
+        Properties:
+            Path: "/service-role/"
+            RoleName: !Sub "AWSCodePipelineServiceRole-${AWS::Region}-happ-backend"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"codepipeline.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - "arn:aws:iam::aws:policy/AdministratorAccess"
+              - !Ref 'AWSCodePipelineServicePolicy'
+
+    CodebuildUserRole:
+        Type: "AWS::IAM::Role"
+        DependsOn:
+          - CodeBuildCloudWatchLogsPolicyUser
+          - CodeBuildBasePolicyUser
+        Properties:
+            Path: "/service-role/"
+            RoleName: !Sub "codebuild-happ-app-user-service-${AWS::Region}-role"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"codebuild.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - "arn:aws:iam::aws:policy/AdministratorAccess"
+              - !Ref "CodeBuildCloudWatchLogsPolicyUser"
+              - !Ref "CodeBuildBasePolicyUser"
+
+    CodebuildAdminUserRole:
+        Type: "AWS::IAM::Role"
+        DependsOn:
+          - CodeBuildCloudWatchLogsPolicyUserAdmin
+          - CodeBuildBasePolicyUserAdmin
+        Properties:
+            Path: "/service-role/"
+            RoleName: !Sub "codebuild-happ-admin-user-service-${AWS::Region}-role"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"codebuild.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - "arn:aws:iam::aws:policy/AdministratorAccess"
+              - !Ref "CodeBuildCloudWatchLogsPolicyUserAdmin"
+              - !Ref "CodeBuildBasePolicyUserAdmin"
+
+    CodebuildNotificationsRole:
+        Type: "AWS::IAM::Role"
+        DependsOn:
+          - CodeBuildCloudWatchLogsNotifications
+          - CodeBuildBasePolicyNotifications
+        Properties:
+            Path: "/service-role/"
+            RoleName: !Sub "codebuild-happ-notifications-service-${AWS::Region}-role"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"codebuild.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - "arn:aws:iam::aws:policy/AdministratorAccess"
+              - !Ref "CodeBuildCloudWatchLogsNotifications"
+              - !Ref "CodeBuildBasePolicyNotifications"
+    
+    CodebuildResourceCreationRole:
+        Type: "AWS::IAM::Role"
+        DependsOn:
+          - CodeBuildCloudWatchLogsPolicyResourceCreation
+          - CodeBuildBasePolicyResourceCreation
+        Properties:
+            Path: "/service-role/"
+            RoleName: !Sub "codebuild-happ-resources-service-${AWS::Region}-role"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"codebuild.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - "arn:aws:iam::aws:policy/AdministratorAccess"
+              - !Ref "CodeBuildCloudWatchLogsPolicyResourceCreation"
+              - !Ref "CodeBuildBasePolicyResourceCreation"
+
+    CodebuildSurveyRole:
+        Type: "AWS::IAM::Role"
+        DependsOn:
+          - CodeBuildCloudWatchLogsPolicySurvey
+          - CodeBuildBasePolicySurvey
+        Properties:
+            Path: "/service-role/"
+            RoleName: !Sub "codebuild-happ-survey-service-${AWS::Region}-role"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"codebuild.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - "arn:aws:iam::aws:policy/AdministratorAccess"
+              - !Ref "CodeBuildCloudWatchLogsPolicySurvey"
+              - !Ref "CodeBuildBasePolicySurvey"
+    
+    
+
+#end role creation
+    
+#start codeBuild creation
+
+# need to set ServiceRole correctly, refer role that created to codeBuild service
+    CodeBuildUser:
+        Type: "AWS::CodeBuild::Project"
+        DependsOn:
+          - CodebuildUserRole
+        Properties:
+            Name: "happ-app-user"
+            Source: 
+                BuildSpec: "devops/dev/devops_app_user.yml"
+                InsecureSsl: false
+                Type: "CODEPIPELINE"
+            Artifacts: 
+                EncryptionDisabled: false
+                Name: "happ-app-user"
+                Packaging: "NONE"
+                Type: "CODEPIPELINE"
+            Cache: 
+                Type: "NO_CACHE"
+            Environment: 
+                ComputeType: "BUILD_GENERAL1_SMALL"
+                Image: "aws/codebuild/standard:5.0"
+                ImagePullCredentialsType: "CODEBUILD"
+                PrivilegedMode: false
+                Type: "LINUX_CONTAINER"
+            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-app-user-service-${AWS::Region}-role"
+            TimeoutInMinutes: 60
+            QueuedTimeoutInMinutes: 480
+            EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
+            BadgeEnabled: false
+            LogsConfig: 
+                CloudWatchLogs: 
+                    Status: "ENABLED"
+                    GroupName: "happ_app_user_microservice"
+                S3Logs: 
+                    Status: "DISABLED"
+                    EncryptionDisabled: false
+
+    CodeBuildAdminUser:
+        Type: "AWS::CodeBuild::Project"
+        DependsOn:
+          - CodebuildAdminUserRole
+        Properties:
+            Name: "happ-admin-user"
+            Source: 
+                BuildSpec: "devops/dev/devops_admin_user.yml"
+                InsecureSsl: false
+                Type: "CODEPIPELINE"
+            Artifacts: 
+                EncryptionDisabled: false
+                Name: "happ-admin-user"
+                Packaging: "NONE"
+                Type: "CODEPIPELINE"
+            Cache: 
+                Type: "NO_CACHE"
+            Environment: 
+                ComputeType: "BUILD_GENERAL1_SMALL"
+                Image: "aws/codebuild/standard:5.0"
+                ImagePullCredentialsType: "CODEBUILD"
+                PrivilegedMode: false
+                Type: "LINUX_CONTAINER"
+            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-admin-user-service-${AWS::Region}-role"
+            TimeoutInMinutes: 60
+            QueuedTimeoutInMinutes: 480
+            EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
+            BadgeEnabled: false
+            LogsConfig: 
+                CloudWatchLogs: 
+                    Status: "ENABLED"
+                    GroupName: "happ_admin_user_microservice"
+                S3Logs: 
+                    Status: "DISABLED"
+                    EncryptionDisabled: false
+
+    CodeBuildNotifications:
+        Type: "AWS::CodeBuild::Project"
+        DependsOn:
+          - CodebuildNotificationsRole
+        Properties:
+            Name: "happ-notification"
+            Source: 
+                BuildSpec: "devops/dev/devops_notification_service.yml"
+                InsecureSsl: false
+                Type: "CODEPIPELINE"
+            Artifacts: 
+                EncryptionDisabled: false
+                Name: "happ-notification"
+                Packaging: "NONE"
+                Type: "CODEPIPELINE"
+            Cache: 
+                Type: "NO_CACHE"
+            Environment: 
+                ComputeType: "BUILD_GENERAL1_SMALL"
+                Image: "aws/codebuild/standard:5.0"
+                ImagePullCredentialsType: "CODEBUILD"
+                PrivilegedMode: false
+                Type: "LINUX_CONTAINER"
+            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-notifications-service-${AWS::Region}-role"
+            TimeoutInMinutes: 60
+            QueuedTimeoutInMinutes: 480
+            EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
+            BadgeEnabled: false
+            LogsConfig: 
+                CloudWatchLogs: 
+                    Status: "ENABLED"
+                    GroupName: "happ_notifications_microservice"
+                S3Logs: 
+                    Status: "DISABLED"
+                    EncryptionDisabled: false
+
+    CodeBuildResourceCreation:
+        Type: "AWS::CodeBuild::Project"
+        DependsOn:
+          - CodebuildResourceCreationRole
+        Properties:
+            Name: "happ-resources"
+            Source: 
+                BuildSpec: "devops/dev/devops_app_resource_creation.yml"
+                InsecureSsl: false
+                Type: "CODEPIPELINE"
+            Artifacts: 
+                EncryptionDisabled: false
+                Name: "happ-resources"
+                Packaging: "NONE"
+                Type: "CODEPIPELINE"
+            Cache: 
+                Type: "NO_CACHE"
+            Environment: 
+                ComputeType: "BUILD_GENERAL1_SMALL"
+                Image: "aws/codebuild/standard:5.0"
+                ImagePullCredentialsType: "CODEBUILD"
+                PrivilegedMode: false
+                Type: "LINUX_CONTAINER"
+            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-resources-service-${AWS::Region}-role"
+            TimeoutInMinutes: 60
+            QueuedTimeoutInMinutes: 480
+            EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
+            BadgeEnabled: false
+            LogsConfig: 
+                CloudWatchLogs: 
+                    Status: "ENABLED"
+                    GroupName: "happ_resources_microservice"
+                S3Logs: 
+                    Status: "DISABLED"
+                    EncryptionDisabled: false
+
+    CodeBuildSurvey:
+        Type: "AWS::CodeBuild::Project"
+        DependsOn:
+          - CodebuildSurveyRole
+        Properties:
+            Name: !Sub "happ-survey"
+            Source: 
+                BuildSpec: "devops/dev/devops_survey_service.yml"
+                InsecureSsl: false
+                Type: "CODEPIPELINE"
+            Artifacts: 
+                EncryptionDisabled: false
+                Name: !Sub "happ-survey"
+                Packaging: "NONE"
+                Type: "CODEPIPELINE"
+            Cache: 
+                Type: "NO_CACHE"
+            Environment: 
+                ComputeType: "BUILD_GENERAL1_SMALL"
+                Image: "aws/codebuild/standard:5.0"
+                ImagePullCredentialsType: "CODEBUILD"
+                PrivilegedMode: false
+                Type: "LINUX_CONTAINER"
+            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-survey-service-${AWS::Region}-role"
+            TimeoutInMinutes: 60
+            QueuedTimeoutInMinutes: 480
+            EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
+            BadgeEnabled: false
+            LogsConfig: 
+                CloudWatchLogs: 
+                    Status: "ENABLED"
+                    GroupName: "happ_survey_microservice"
+                S3Logs: 
+                    Status: "DISABLED"
+                    EncryptionDisabled: false
+
+#end codeBuild creation
+
+#start s3 bucket creation
+
+#this is for upload pipeline stack
+#we can use any name
+    S3Bucket:
+        Type: "AWS::S3::Bucket"
+        Properties:
+            BucketName: !Sub "codepipeline-${AWS::Region}-happ-be-v1-09072024"
+#end s3 bucket creation
+
+#start pipeline creation
+# Generate token like this:
+# GH Link: https://github.com/settings/tokens
+    CodePipelinePipeline:
+        Type: "AWS::CodePipeline::Pipeline"
+        DependsOn:
+          - AWSCodePipelineServiceRole
+          - S3Bucket
+        Properties:
+            Name: "venus-backend"
+            RoleArn: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/AWSCodePipelineServiceRole-${AWS::Region}-happ-backend"
+            ArtifactStore: 
+                Location: !Ref "S3Bucket"
+                Type: "S3"
+            Stages: 
+              - 
+                Name: "Source"
+                Actions: 
+                  - 
+                    Name: "Source"
+                    ActionTypeId: 
+                        Category: "Source"
+                        Owner: "ThirdParty"
+                        Provider: "GitHub"
+                        Version: "1"
+                    Configuration: 
+                        Branch: "dev"
+                        OAuthToken: "{{resolve:secretsmanager:GitHubPersonalAccessToken:SecretString:GitHubPersonalAccessToken::}}"
+                        Owner: "happ-developer"
+                        PollForSourceChanges: "false"
+                        Repo: "happ"
+                    OutputArtifacts: 
+                      - 
+                        Name: "SourceArtifact"
+                    Region: !Ref AWS::Region
+                    Namespace: "SourceVariables"
+                    RunOrder: 1
+
+              - 
+                Name: "Manual Approval"
+                Actions: 
+                  - 
+                    Name: "Manual Approval"
+                    ActionTypeId: 
+                        Category: "Approval"
+                        Owner: "AWS"
+                        Provider: "Manual"
+                        Version: "1"
+                    RunOrder: 1
+
+              - 
+                Name: "resource_creation"
+                Actions: 
+                  - 
+                    Name: "happ_resource_creation"
+                    ActionTypeId: 
+                        Category: "Build"
+                        Owner: "AWS"
+                        Provider: "CodeBuild"
+                        Version: "1"
+                    Configuration: 
+                        ProjectName: "happ-resource-creation"
+                    InputArtifacts: 
+                      - 
+                        Name: "SourceArtifact"
+                    Region: !Ref AWS::Region
+                    Namespace: "tpip-prerequisite-microservice"
+                    RunOrder: 1
+
+              - 
+                Name: "User-services"
+                Actions: 
+                  - 
+                    Name: "happ-app-user-microservice"
+                    ActionTypeId: 
+                        Category: "Build"
+                        Owner: "AWS"
+                        Provider: "CodeBuild"
+                        Version: "1"
+                    Configuration: 
+                        ProjectName: "happ-app-user"
+                    InputArtifacts: 
+                      - 
+                        Name: "SourceArtifact"
+                    Region: !Ref AWS::Region
+                    Namespace: "happ-app-user-microservice"
+                    RunOrder: 1
+                  - 
+                    Name: "happ-admin-user-microservice"
+                    ActionTypeId: 
+                        Category: "Build"
+                        Owner: "AWS"
+                        Provider: "CodeBuild"
+                        Version: "1"
+                    Configuration: 
+                        ProjectName: "happ-admin-user"
+                    InputArtifacts: 
+                      - 
+                        Name: "SourceArtifact"
+                    Region: !Ref AWS::Region
+                    Namespace: "happ-admin-user-microservice"
+                    RunOrder: 1
+
+              - 
+                Name: "Build services"
+                Actions: 
+                  - 
+                    Name: "happ-notifications-microservice"
+                    ActionTypeId: 
+                        Category: "Build"
+                        Owner: "AWS"
+                        Provider: "CodeBuild"
+                        Version: "1"
+                    Configuration: 
+                        ProjectName: "happ-notifications"
+                    InputArtifacts: 
+                      - 
+                        Name: "SourceArtifact"
+                    Region: !Ref AWS::Region
+                    Namespace: "happ-notifications-microservice"
+                    RunOrder: 1
+
+                  - 
+                    Name: "happ-survey-microservice"
+                    ActionTypeId: 
+                        Category: "Build"
+                        Owner: "AWS"
+                        Provider: "CodeBuild"
+                        Version: "1"
+                    Configuration: 
+                        ProjectName: "happ-survey"
+                    InputArtifacts: 
+                      - 
+                        Name: "SourceArtifact"
+                    Region: !Ref AWS::Region
+                    Namespace: "happ-survey-microservice"
+                    RunOrder: 1
+#end pipeline creation
+
+
+
+    
+    
+    
+    

@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "create happ essentials"
+Resources:
+# create deployement bucket
+    #deployment buckt
+    DeployementBucket:
+        Type: "AWS::S3::Bucket"
+        Properties:
+            BucketName: !Sub "happ-dev-serverless-deployment"
+
+    SchemeRdsSecretKeys:
+      Type: AWS::SecretsManager::Secret
+      Properties:
+        Name: scheme-db-password
+        Tags:
+          -
+            Key: password
+            Value: @@@@@@@@@ #need to add invalid password to this after the stack creation need to update secret manager key and value
+          -
+            Key: username
+            Value: @@@@@@@@@ #need to add invalid userName to this after the stack creation need to update secret manager key and value
+          -
+            Key: engine
+            Value: mysql #need to add invalid userName to this after the stack creation need to update secret manager key and value
+          -
+            Key: host
+            Value: 
+          -
+            Key: port
+            Value: 3306
+          -
+            Key: dbClusterIdentifier
+            Value: 
+
+    #IOT policy
+    ServerlessNotificationPolicy:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "serverless-notifications"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Action": [
+                                "iot:Connect",
+                                "iot:Subscribe",
+                                "iot:Publish",
+                                "iot:Receive"
+                            ],
+                            "Resource": "*",
+                            "Effect": "Allow"
+                        }
+
+                    ]
+                }
+
+
+    ServerlessNotificationRole:
+        Type: "AWS::IAM::Role"
+        DependsOn:
+          - ServerlessNotificationPolicy
+        Properties:
+            Path: "/service-role/"
+            RoleName: !Sub "serverless-notifications"
+            #need to add your account id
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::396131366309:root\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - "arn:aws:iam::aws:policy/AWSIoTThingsRegistration"
+              - "arn:aws:iam::aws:policy/AWSIoTLogging"
+              - "arn:aws:iam::aws:policy/AWSIoTRuleActions"
+              - !Ref 'ServerlessNotificationPolicy'
+
+
+
+    
+    
+    
+    
