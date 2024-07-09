@@ -22,7 +22,11 @@ provider:
     ENV_ID: ${file(../env.yml):${opt:stage}.envId}
     STAGE: ${self:provider.stage, 'dev'}
     REGION: ${self:provider.region}
-    DEPLOYMENT_BUCKET: need to add a name
+    USER_POOL: ${file(../env.yml):${opt:stage}.userPoolApp}
+    DEPLOYMENT_BUCKET: ${file(../env.yml):${opt:stage}.deploymentBucket}
+    ALLOWED_ORIGINS_S3: ${file(../env.yml):${opt:stage}.allowedOriginsS3}
+    ALLOWED_ORIGINS: ${file(../env.yml):${opt:stage}.allowedOrigins}
+    ALLOWED_ORIGINS_CF: ${file(../env.yml):${opt:stage}.allowedOriginsCF}
   iam:
     role:
       statements:
