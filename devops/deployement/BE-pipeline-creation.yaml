@@ -760,10 +760,10 @@ Resources:
                 ImagePullCredentialsType: "CODEBUILD"
                 PrivilegedMode: false
                 Type: "LINUX_CONTAINER"
-            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-resources-service-${AWS::Region}-role"
+            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-resources-service-ap-south-1-role"
             TimeoutInMinutes: 60
             QueuedTimeoutInMinutes: 480
-            EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
+            EncryptionKey: !Sub "arn:aws:kms:ap-south-1:${AWS::AccountId}:alias/aws/s3"
             BadgeEnabled: false
             LogsConfig: 
                 CloudWatchLogs: 
@@ -847,7 +847,7 @@ Resources:
                         Provider: "GitHub"
                         Version: "1"
                     Configuration: 
-                        Branch: "dev"
+                        Branch: "testing-dev-ml"
                         OAuthToken: "test-github-oauth-token"
                         Owner: "happ-developer"
                         PollForSourceChanges: "false"
