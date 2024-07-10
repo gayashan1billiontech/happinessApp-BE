@@ -5,7 +5,7 @@ Resources:
     AWSCodePipelineServicePolicy:
         Type: "AWS::IAM::ManagedPolicy"
         Properties:
-            ManagedPolicyName: !Sub "AWSCodePipelineServicePolicy-${AWS::Region}-happ-backend"
+            ManagedPolicyName: !Sub "AWSCodePipelineServicePolicy-ap-south-1-happ-backend"
             Path: "/service-role/"
             PolicyDocument: |
                 {
@@ -164,7 +164,7 @@ Resources:
     CodeBuildCloudWatchLogsPolicyUser:
         Type: "AWS::IAM::ManagedPolicy"
         Properties:
-            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-app-user-${AWS::Region}"
+            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-app-user-ap-south-1"
             Path: "/service-role/"
             PolicyDocument: !Sub |
                 {
@@ -173,8 +173,8 @@ Resources:
                         {
                             "Effect": "Allow",
                             "Resource": [
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_app_user_microservice",
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_app_user_microservice:*"
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:happ_app_user_microservice",
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:happ_app_user_microservice:*"
                             ],
                             "Action": [
                                 "logs:CreateLogGroup",
@@ -188,7 +188,7 @@ Resources:
     CodeBuildCloudWatchLogsPolicyUserAdmin:
         Type: "AWS::IAM::ManagedPolicy"
         Properties:
-            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-admin-user-${AWS::Region}"
+            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-admin-user-ap-south-1"
             Path: "/service-role/"
             PolicyDocument: !Sub |
                 {
@@ -197,8 +197,8 @@ Resources:
                         {
                             "Effect": "Allow",
                             "Resource": [
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_admin_user_microservice",
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_admin_user_microservice:*"
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:happ_admin_user_microservice",
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:happ_admin_user_microservice:*"
                             ],
                             "Action": [
                                 "logs:CreateLogGroup",
@@ -212,7 +212,7 @@ Resources:
     CodeBuildCloudWatchLogsNotifications:
         Type: "AWS::IAM::ManagedPolicy"
         Properties:
-            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-notifications-${AWS::Region}"
+            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-notifications-ap-south-1"
             Path: "/service-role/"
             PolicyDocument: !Sub |
                 {
@@ -221,8 +221,8 @@ Resources:
                         {
                             "Effect": "Allow",
                             "Resource": [
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_notifications_microservice",
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_notifications_microservice:*"
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:happ_notifications_microservice",
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:happ_notifications_microservice:*"
                             ],
                             "Action": [
                                 "logs:CreateLogGroup",
@@ -236,7 +236,7 @@ Resources:
     CodeBuildCloudWatchLogsPolicyResourceCreation:
         Type: "AWS::IAM::ManagedPolicy"
         Properties:
-            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-resource-creation-${AWS::Region}"
+            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-resource-creation-ap-south-1"
             Path: "/service-role/"
             PolicyDocument: !Sub |
                 {
@@ -245,8 +245,8 @@ Resources:
                         {
                             "Effect": "Allow",
                             "Resource": [
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_resources_microservice",
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_resources_microservice:*"
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:happ_resources_microservice",
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:happ_resources_microservice:*"
                             ],
                             "Action": [
                                 "logs:CreateLogGroup",
@@ -260,7 +260,7 @@ Resources:
     CodeBuildCloudWatchLogsPolicySurvey:
         Type: "AWS::IAM::ManagedPolicy"
         Properties:
-            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-survey-${AWS::Region}"
+            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-survey-ap-south-1"
             Path: "/service-role/"
             PolicyDocument: !Sub |
                 {
@@ -269,8 +269,8 @@ Resources:
                         {
                             "Effect": "Allow",
                             "Resource": [
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_survey_microservice",
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_survey_microservice:*"
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:happ_survey_microservice",
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:happ_survey_microservice:*"
                             ],
                             "Action": [
                                 "logs:CreateLogGroup",
@@ -284,7 +284,7 @@ Resources:
     CodeBuildBasePolicyUser:
         Type: "AWS::IAM::ManagedPolicy"
         Properties:
-            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-app-user-${AWS::Region}"
+            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-app-user-ap-south-1"
             Path: "/service-role/"
             PolicyDocument: !Sub |
                 {
@@ -293,8 +293,8 @@ Resources:
                         {
                             "Effect": "Allow",
                             "Resource": [
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-app-user",
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-app-user:*"
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:/aws/codebuild/happ-app-user",
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:/aws/codebuild/happ-app-user:*"
                             ],
                             "Action": [
                                 "logs:CreateLogGroup",
@@ -305,7 +305,7 @@ Resources:
                         {
                             "Effect": "Allow",
                             "Resource": [
-                                "arn:aws:s3:::codepipeline-${AWS::Region}-*"
+                                "arn:aws:s3:::codepipeline-ap-south-1-*"
                             ],
                             "Action": [
                                 "s3:PutObject",
@@ -324,7 +324,7 @@ Resources:
                                 "codebuild:BatchPutTestCases"
                             ],
                             "Resource": [
-                                "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/happ-app-user-*"
+                                "arn:aws:codebuild:ap-south-1:${AWS::AccountId}:report-group/happ-app-user-*"
                             ]
                         }
                     ]
@@ -333,7 +333,7 @@ Resources:
     CodeBuildBasePolicyUserAdmin:
         Type: "AWS::IAM::ManagedPolicy"
         Properties:
-            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-admin-user-${AWS::Region}"
+            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-admin-user-ap-south-1"
             Path: "/service-role/"
             PolicyDocument: !Sub |
                 {
@@ -342,8 +342,8 @@ Resources:
                         {
                             "Effect": "Allow",
                             "Resource": [
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-admin-user",
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-admin-user:*"
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:/aws/codebuild/happ-admin-user",
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:/aws/codebuild/happ-admin-user:*"
                             ],
                             "Action": [
                                 "logs:CreateLogGroup",
@@ -354,7 +354,7 @@ Resources:
                         {
                             "Effect": "Allow",
                             "Resource": [
-                                "arn:aws:s3:::codepipeline-${AWS::Region}-*"
+                                "arn:aws:s3:::codepipeline-ap-south-1-*"
                             ],
                             "Action": [
                                 "s3:PutObject",
@@ -373,7 +373,7 @@ Resources:
                                 "codebuild:BatchPutTestCases"
                             ],
                             "Resource": [
-                                "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/happ-admin-user-*"
+                                "arn:aws:codebuild:ap-south-1:${AWS::AccountId}:report-group/happ-admin-user-*"
                             ]
                         }
                     ]
@@ -382,7 +382,7 @@ Resources:
     CodeBuildBasePolicyNotifications:
         Type: "AWS::IAM::ManagedPolicy"
         Properties:
-            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-notifications-${AWS::Region}"
+            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-notifications-ap-south-1"
             Path: "/service-role/"
             PolicyDocument: !Sub |
                 {
@@ -391,8 +391,8 @@ Resources:
                         {
                             "Effect": "Allow",
                             "Resource": [
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-notifications-microservise",
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-notifications-microservise:*"
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:/aws/codebuild/happ-notifications-microservise",
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:/aws/codebuild/happ-notifications-microservise:*"
                             ],
                             "Action": [
                                 "logs:CreateLogGroup",
@@ -403,7 +403,7 @@ Resources:
                         {
                             "Effect": "Allow",
                             "Resource": [
-                                "arn:aws:s3:::codepipeline-${AWS::Region}-*"
+                                "arn:aws:s3:::codepipeline-ap-south-1-*"
                             ],
                             "Action": [
                                 "s3:PutObject",
@@ -422,7 +422,7 @@ Resources:
                                 "codebuild:BatchPutTestCases"
                             ],
                             "Resource": [
-                                "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/happ-notifications-*"
+                                "arn:aws:codebuild:ap-south-1:${AWS::AccountId}:report-group/happ-notifications-*"
                             ]
                         }
                     ]
@@ -431,7 +431,7 @@ Resources:
     CodeBuildBasePolicyResourceCreation:
         Type: "AWS::IAM::ManagedPolicy"
         Properties:
-            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-resources-${AWS::Region}"
+            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-resources-ap-south-1"
             Path: "/service-role/"
             PolicyDocument: !Sub |
                 {
@@ -440,8 +440,8 @@ Resources:
                         {
                             "Effect": "Allow",
                             "Resource": [
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-resources",
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-resources:*"
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:/aws/codebuild/happ-resources",
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:/aws/codebuild/happ-resources:*"
                             ],
                             "Action": [
                                 "logs:CreateLogGroup",
@@ -452,7 +452,7 @@ Resources:
                         {
                             "Effect": "Allow",
                             "Resource": [
-                                "arn:aws:s3:::codepipeline-${AWS::Region}-*"
+                                "arn:aws:s3:::codepipeline-ap-south-1-*"
                             ],
                             "Action": [
                                 "s3:PutObject",
@@ -471,7 +471,7 @@ Resources:
                                 "codebuild:BatchPutTestCases"
                             ],
                             "Resource": [
-                                "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/happ-resources-*"
+                                "arn:aws:codebuild:ap-south-1:${AWS::AccountId}:report-group/happ-resources-*"
                             ]
                         }
                     ]
@@ -480,7 +480,7 @@ Resources:
     CodeBuildBasePolicySurvey:
         Type: "AWS::IAM::ManagedPolicy"
         Properties:
-            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-survey-${AWS::Region}"
+            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-survey-ap-south-1"
             Path: "/service-role/"
             PolicyDocument: !Sub |
                 {
@@ -489,8 +489,8 @@ Resources:
                         {
                             "Effect": "Allow",
                             "Resource": [
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/tpip-prerequisite",
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/tpip-prerequisite:*"
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:/aws/codebuild/tpip-prerequisite",
+                                "arn:aws:logs:ap-south-1:${AWS::AccountId}:log-group:/aws/codebuild/tpip-prerequisite:*"
                             ],
                             "Action": [
                                 "logs:CreateLogGroup",
@@ -501,7 +501,7 @@ Resources:
                         {
                             "Effect": "Allow",
                             "Resource": [
-                                "arn:aws:s3:::codepipeline-${AWS::Region}-*"
+                                "arn:aws:s3:::codepipeline-ap-south-1-*"
                             ],
                             "Action": [
                                 "s3:PutObject",
@@ -520,7 +520,7 @@ Resources:
                                 "codebuild:BatchPutTestCases"
                             ],
                             "Resource": [
-                                "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/tpip-prerequisite-*"
+                                "arn:aws:codebuild:ap-south-1:${AWS::AccountId}:report-group/tpip-prerequisite-*"
                             ]
                         }
                     ]
@@ -540,7 +540,7 @@ Resources:
           - AWSCodePipelineServicePolicy
         Properties:
             Path: "/service-role/"
-            RoleName: !Sub "AWSCodePipelineServiceRole-${AWS::Region}-happ-backend"
+            RoleName: !Sub "AWSCodePipelineServiceRole-ap-south-1-happ-backend"
             AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"codepipeline.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
             MaxSessionDuration: 3600
             ManagedPolicyArns: 
@@ -554,7 +554,7 @@ Resources:
           - CodeBuildBasePolicyUser
         Properties:
             Path: "/service-role/"
-            RoleName: !Sub "codebuild-happ-app-user-service-${AWS::Region}-role"
+            RoleName: !Sub "codebuild-happ-app-user-service-ap-south-1-role"
             AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"codebuild.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
             MaxSessionDuration: 3600
             ManagedPolicyArns: 
@@ -569,7 +569,7 @@ Resources:
           - CodeBuildBasePolicyUserAdmin
         Properties:
             Path: "/service-role/"
-            RoleName: !Sub "codebuild-happ-admin-user-service-${AWS::Region}-role"
+            RoleName: !Sub "codebuild-happ-admin-user-service-ap-south-1-role"
             AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"codebuild.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
             MaxSessionDuration: 3600
             ManagedPolicyArns: 
@@ -584,7 +584,7 @@ Resources:
           - CodeBuildBasePolicyNotifications
         Properties:
             Path: "/service-role/"
-            RoleName: !Sub "codebuild-happ-notifications-service-${AWS::Region}-role"
+            RoleName: !Sub "codebuild-happ-notifications-service-ap-south-1-role"
             AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"codebuild.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
             MaxSessionDuration: 3600
             ManagedPolicyArns: 
@@ -599,7 +599,7 @@ Resources:
           - CodeBuildBasePolicyResourceCreation
         Properties:
             Path: "/service-role/"
-            RoleName: !Sub "codebuild-happ-resources-service-${AWS::Region}-role"
+            RoleName: !Sub "codebuild-happ-resources-service-ap-south-1-role"
             AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"codebuild.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
             MaxSessionDuration: 3600
             ManagedPolicyArns: 
@@ -614,7 +614,7 @@ Resources:
           - CodeBuildBasePolicySurvey
         Properties:
             Path: "/service-role/"
-            RoleName: !Sub "codebuild-happ-survey-service-${AWS::Region}-role"
+            RoleName: !Sub "codebuild-happ-survey-service-ap-south-1-role"
             AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"codebuild.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
             MaxSessionDuration: 3600
             ManagedPolicyArns: 
@@ -629,113 +629,113 @@ Resources:
 #start codeBuild creation
 
 # need to set ServiceRole correctly, refer role that created to codeBuild service
-    CodeBuildUser:
-        Type: "AWS::CodeBuild::Project"
-        DependsOn:
-          - CodebuildUserRole
-        Properties:
-            Name: "happ-app-user"
-            Source: 
-                BuildSpec: "devops/dev/devops_app_user.yml"
-                InsecureSsl: false
-                Type: "CODEPIPELINE"
-            Artifacts: 
-                EncryptionDisabled: false
-                Name: "happ-app-user"
-                Packaging: "NONE"
-                Type: "CODEPIPELINE"
-            Cache: 
-                Type: "NO_CACHE"
-            Environment: 
-                ComputeType: "BUILD_GENERAL1_SMALL"
-                Image: "aws/codebuild/standard:5.0"
-                ImagePullCredentialsType: "CODEBUILD"
-                PrivilegedMode: false
-                Type: "LINUX_CONTAINER"
-            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-app-user-service-${AWS::Region}-role"
-            TimeoutInMinutes: 60
-            QueuedTimeoutInMinutes: 480
-            EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
-            BadgeEnabled: false
-            LogsConfig: 
-                CloudWatchLogs: 
-                    Status: "ENABLED"
-                    GroupName: "happ_app_user_microservice"
-                S3Logs: 
-                    Status: "DISABLED"
-                    EncryptionDisabled: false
+    # CodeBuildUser:
+    #     Type: "AWS::CodeBuild::Project"
+    #     DependsOn:
+    #       - CodebuildUserRole
+    #     Properties:
+    #         Name: "happ-app-user"
+    #         Source: 
+    #             BuildSpec: "devops/dev/devops_app_user.yml"
+    #             InsecureSsl: false
+    #             Type: "CODEPIPELINE"
+    #         Artifacts: 
+    #             EncryptionDisabled: false
+    #             Name: "happ-app-user"
+    #             Packaging: "NONE"
+    #             Type: "CODEPIPELINE"
+    #         Cache: 
+    #             Type: "NO_CACHE"
+    #         Environment: 
+    #             ComputeType: "BUILD_GENERAL1_SMALL"
+    #             Image: "aws/codebuild/standard:5.0"
+    #             ImagePullCredentialsType: "CODEBUILD"
+    #             PrivilegedMode: false
+    #             Type: "LINUX_CONTAINER"
+    #         ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-app-user-service-${AWS::Region}-role"
+    #         TimeoutInMinutes: 60
+    #         QueuedTimeoutInMinutes: 480
+    #         EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
+    #         BadgeEnabled: false
+    #         LogsConfig: 
+    #             CloudWatchLogs: 
+    #                 Status: "ENABLED"
+    #                 GroupName: "happ_app_user_microservice"
+    #             S3Logs: 
+    #                 Status: "DISABLED"
+    #                 EncryptionDisabled: false
 
-    CodeBuildAdminUser:
-        Type: "AWS::CodeBuild::Project"
-        DependsOn:
-          - CodebuildAdminUserRole
-        Properties:
-            Name: "happ-admin-user"
-            Source: 
-                BuildSpec: "devops/dev/devops_admin_user.yml"
-                InsecureSsl: false
-                Type: "CODEPIPELINE"
-            Artifacts: 
-                EncryptionDisabled: false
-                Name: "happ-admin-user"
-                Packaging: "NONE"
-                Type: "CODEPIPELINE"
-            Cache: 
-                Type: "NO_CACHE"
-            Environment: 
-                ComputeType: "BUILD_GENERAL1_SMALL"
-                Image: "aws/codebuild/standard:5.0"
-                ImagePullCredentialsType: "CODEBUILD"
-                PrivilegedMode: false
-                Type: "LINUX_CONTAINER"
-            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-admin-user-service-${AWS::Region}-role"
-            TimeoutInMinutes: 60
-            QueuedTimeoutInMinutes: 480
-            EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
-            BadgeEnabled: false
-            LogsConfig: 
-                CloudWatchLogs: 
-                    Status: "ENABLED"
-                    GroupName: "happ_admin_user_microservice"
-                S3Logs: 
-                    Status: "DISABLED"
-                    EncryptionDisabled: false
+    # CodeBuildAdminUser:
+    #     Type: "AWS::CodeBuild::Project"
+    #     DependsOn:
+    #       - CodebuildAdminUserRole
+    #     Properties:
+    #         Name: "happ-admin-user"
+    #         Source: 
+    #             BuildSpec: "devops/dev/devops_admin_user.yml"
+    #             InsecureSsl: false
+    #             Type: "CODEPIPELINE"
+    #         Artifacts: 
+    #             EncryptionDisabled: false
+    #             Name: "happ-admin-user"
+    #             Packaging: "NONE"
+    #             Type: "CODEPIPELINE"
+    #         Cache: 
+    #             Type: "NO_CACHE"
+    #         Environment: 
+    #             ComputeType: "BUILD_GENERAL1_SMALL"
+    #             Image: "aws/codebuild/standard:5.0"
+    #             ImagePullCredentialsType: "CODEBUILD"
+    #             PrivilegedMode: false
+    #             Type: "LINUX_CONTAINER"
+    #         ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-admin-user-service-${AWS::Region}-role"
+    #         TimeoutInMinutes: 60
+    #         QueuedTimeoutInMinutes: 480
+    #         EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
+    #         BadgeEnabled: false
+    #         LogsConfig: 
+    #             CloudWatchLogs: 
+    #                 Status: "ENABLED"
+    #                 GroupName: "happ_admin_user_microservice"
+    #             S3Logs: 
+    #                 Status: "DISABLED"
+    #                 EncryptionDisabled: false
 
-    CodeBuildNotifications:
-        Type: "AWS::CodeBuild::Project"
-        DependsOn:
-          - CodebuildNotificationsRole
-        Properties:
-            Name: "happ-notification"
-            Source: 
-                BuildSpec: "devops/dev/devops_notification_service.yml"
-                InsecureSsl: false
-                Type: "CODEPIPELINE"
-            Artifacts: 
-                EncryptionDisabled: false
-                Name: "happ-notification"
-                Packaging: "NONE"
-                Type: "CODEPIPELINE"
-            Cache: 
-                Type: "NO_CACHE"
-            Environment: 
-                ComputeType: "BUILD_GENERAL1_SMALL"
-                Image: "aws/codebuild/standard:5.0"
-                ImagePullCredentialsType: "CODEBUILD"
-                PrivilegedMode: false
-                Type: "LINUX_CONTAINER"
-            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-notifications-service-${AWS::Region}-role"
-            TimeoutInMinutes: 60
-            QueuedTimeoutInMinutes: 480
-            EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
-            BadgeEnabled: false
-            LogsConfig: 
-                CloudWatchLogs: 
-                    Status: "ENABLED"
-                    GroupName: "happ_notifications_microservice"
-                S3Logs: 
-                    Status: "DISABLED"
-                    EncryptionDisabled: false
+    # CodeBuildNotifications:
+    #     Type: "AWS::CodeBuild::Project"
+    #     DependsOn:
+    #       - CodebuildNotificationsRole
+    #     Properties:
+    #         Name: "happ-notification"
+    #         Source: 
+    #             BuildSpec: "devops/dev/devops_notification_service.yml"
+    #             InsecureSsl: false
+    #             Type: "CODEPIPELINE"
+    #         Artifacts: 
+    #             EncryptionDisabled: false
+    #             Name: "happ-notification"
+    #             Packaging: "NONE"
+    #             Type: "CODEPIPELINE"
+    #         Cache: 
+    #             Type: "NO_CACHE"
+    #         Environment: 
+    #             ComputeType: "BUILD_GENERAL1_SMALL"
+    #             Image: "aws/codebuild/standard:5.0"
+    #             ImagePullCredentialsType: "CODEBUILD"
+    #             PrivilegedMode: false
+    #             Type: "LINUX_CONTAINER"
+    #         ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-notifications-service-${AWS::Region}-role"
+    #         TimeoutInMinutes: 60
+    #         QueuedTimeoutInMinutes: 480
+    #         EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
+    #         BadgeEnabled: false
+    #         LogsConfig: 
+    #             CloudWatchLogs: 
+    #                 Status: "ENABLED"
+    #                 GroupName: "happ_notifications_microservice"
+    #             S3Logs: 
+    #                 Status: "DISABLED"
+    #                 EncryptionDisabled: false
 
     CodeBuildResourceCreation:
         Type: "AWS::CodeBuild::Project"
@@ -773,41 +773,41 @@ Resources:
                     Status: "DISABLED"
                     EncryptionDisabled: false
 
-    CodeBuildSurvey:
-        Type: "AWS::CodeBuild::Project"
-        DependsOn:
-          - CodebuildSurveyRole
-        Properties:
-            Name: !Sub "happ-survey"
-            Source: 
-                BuildSpec: "devops/dev/devops_survey_service.yml"
-                InsecureSsl: false
-                Type: "CODEPIPELINE"
-            Artifacts: 
-                EncryptionDisabled: false
-                Name: !Sub "happ-survey"
-                Packaging: "NONE"
-                Type: "CODEPIPELINE"
-            Cache: 
-                Type: "NO_CACHE"
-            Environment: 
-                ComputeType: "BUILD_GENERAL1_SMALL"
-                Image: "aws/codebuild/standard:5.0"
-                ImagePullCredentialsType: "CODEBUILD"
-                PrivilegedMode: false
-                Type: "LINUX_CONTAINER"
-            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-survey-service-${AWS::Region}-role"
-            TimeoutInMinutes: 60
-            QueuedTimeoutInMinutes: 480
-            EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
-            BadgeEnabled: false
-            LogsConfig: 
-                CloudWatchLogs: 
-                    Status: "ENABLED"
-                    GroupName: "happ_survey_microservice"
-                S3Logs: 
-                    Status: "DISABLED"
-                    EncryptionDisabled: false
+    # CodeBuildSurvey:
+    #     Type: "AWS::CodeBuild::Project"
+    #     DependsOn:
+    #       - CodebuildSurveyRole
+    #     Properties:
+    #         Name: !Sub "happ-survey"
+    #         Source: 
+    #             BuildSpec: "devops/dev/devops_survey_service.yml"
+    #             InsecureSsl: false
+    #             Type: "CODEPIPELINE"
+    #         Artifacts: 
+    #             EncryptionDisabled: false
+    #             Name: !Sub "happ-survey"
+    #             Packaging: "NONE"
+    #             Type: "CODEPIPELINE"
+    #         Cache: 
+    #             Type: "NO_CACHE"
+    #         Environment: 
+    #             ComputeType: "BUILD_GENERAL1_SMALL"
+    #             Image: "aws/codebuild/standard:5.0"
+    #             ImagePullCredentialsType: "CODEBUILD"
+    #             PrivilegedMode: false
+    #             Type: "LINUX_CONTAINER"
+    #         ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-survey-service-ap-south-1-role"
+    #         TimeoutInMinutes: 60
+    #         QueuedTimeoutInMinutes: 480
+    #         EncryptionKey: !Sub "arn:aws:kms:ap-south-1:${AWS::AccountId}:alias/aws/s3"
+    #         BadgeEnabled: false
+    #         LogsConfig: 
+    #             CloudWatchLogs: 
+    #                 Status: "ENABLED"
+    #                 GroupName: "happ_survey_microservice"
+    #             S3Logs: 
+    #                 Status: "DISABLED"
+    #                 EncryptionDisabled: false
 
 #end codeBuild creation
 
@@ -818,7 +818,7 @@ Resources:
     S3Bucket:
         Type: "AWS::S3::Bucket"
         Properties:
-            BucketName: !Sub "codepipeline-${AWS::Region}-happ-be-v1-09072024"
+            BucketName: !Sub "codepipeline-ap-south-1-happ-be-v1-09072024"
 #end s3 bucket creation
 
 #start pipeline creation
@@ -830,8 +830,8 @@ Resources:
           - AWSCodePipelineServiceRole
           - S3Bucket
         Properties:
-            Name: "venus-backend"
-            RoleArn: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/AWSCodePipelineServiceRole-${AWS::Region}-happ-backend"
+            Name: "happ-backend"
+            RoleArn: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/AWSCodePipelineServiceRole-ap-south-1-happ-backend"
             ArtifactStore: 
                 Location: !Ref "S3Bucket"
                 Type: "S3"
@@ -848,7 +848,7 @@ Resources:
                         Version: "1"
                     Configuration: 
                         Branch: "dev"
-                        OAuthToken: "{{resolve:secretsmanager:GitHubPersonalAccessToken:SecretString:GitHubPersonalAccessToken::}}"
+                        OAuthToken: "test-github-oauth-token"
                         Owner: "happ-developer"
                         PollForSourceChanges: "false"
                         Repo: "happ"
@@ -860,10 +860,10 @@ Resources:
                     RunOrder: 1
 
               - 
-                Name: "Manual Approval"
+                Name: "ManualApproval"
                 Actions: 
                   - 
-                    Name: "Manual Approval"
+                    Name: "ManualApproval"
                     ActionTypeId: 
                         Category: "Approval"
                         Owner: "AWS"
@@ -872,7 +872,7 @@ Resources:
                     RunOrder: 1
 
               - 
-                Name: "resource_creation"
+                Name: "ResourceCreation"
                 Actions: 
                   - 
                     Name: "happ_resource_creation"
@@ -890,74 +890,74 @@ Resources:
                     Namespace: "tpip-prerequisite-microservice"
                     RunOrder: 1
 
-              - 
-                Name: "User-services"
-                Actions: 
-                  - 
-                    Name: "happ-app-user-microservice"
-                    ActionTypeId: 
-                        Category: "Build"
-                        Owner: "AWS"
-                        Provider: "CodeBuild"
-                        Version: "1"
-                    Configuration: 
-                        ProjectName: "happ-app-user"
-                    InputArtifacts: 
-                      - 
-                        Name: "SourceArtifact"
-                    Region: !Ref AWS::Region
-                    Namespace: "happ-app-user-microservice"
-                    RunOrder: 1
-                  - 
-                    Name: "happ-admin-user-microservice"
-                    ActionTypeId: 
-                        Category: "Build"
-                        Owner: "AWS"
-                        Provider: "CodeBuild"
-                        Version: "1"
-                    Configuration: 
-                        ProjectName: "happ-admin-user"
-                    InputArtifacts: 
-                      - 
-                        Name: "SourceArtifact"
-                    Region: !Ref AWS::Region
-                    Namespace: "happ-admin-user-microservice"
-                    RunOrder: 1
+            #   - 
+            #     Name: "UserServices"
+            #     Actions: 
+            #       - 
+            #         Name: "happ-app-user-microservice"
+            #         ActionTypeId: 
+            #             Category: "Build"
+            #             Owner: "AWS"
+            #             Provider: "CodeBuild"
+            #             Version: "1"
+            #         Configuration: 
+            #             ProjectName: "happ-app-user"
+            #         InputArtifacts: 
+            #           - 
+            #             Name: "SourceArtifact"
+            #         Region: !Ref AWS::Region
+            #         Namespace: "happ-app-user-microservice"
+            #         RunOrder: 1
+            #       - 
+            #         Name: "happ-admin-user-microservice"
+            #         ActionTypeId: 
+            #             Category: "Build"
+            #             Owner: "AWS"
+            #             Provider: "CodeBuild"
+            #             Version: "1"
+            #         Configuration: 
+            #             ProjectName: "happ-admin-user"
+            #         InputArtifacts: 
+            #           - 
+            #             Name: "SourceArtifact"
+            #         Region: !Ref AWS::Region
+            #         Namespace: "happ-admin-user-microservice"
+            #         RunOrder: 1
 
-              - 
-                Name: "Build services"
-                Actions: 
-                  - 
-                    Name: "happ-notifications-microservice"
-                    ActionTypeId: 
-                        Category: "Build"
-                        Owner: "AWS"
-                        Provider: "CodeBuild"
-                        Version: "1"
-                    Configuration: 
-                        ProjectName: "happ-notifications"
-                    InputArtifacts: 
-                      - 
-                        Name: "SourceArtifact"
-                    Region: !Ref AWS::Region
-                    Namespace: "happ-notifications-microservice"
-                    RunOrder: 1
+            #   - 
+            #     Name: "BuildServices"
+            #     Actions: 
+            #       - 
+            #         Name: "happ-notifications-microservice"
+            #         ActionTypeId: 
+            #             Category: "Build"
+            #             Owner: "AWS"
+            #             Provider: "CodeBuild"
+            #             Version: "1"
+            #         Configuration: 
+            #             ProjectName: "happ-notifications"
+            #         InputArtifacts: 
+            #           - 
+            #             Name: "SourceArtifact"
+            #         Region: !Ref AWS::Region
+            #         Namespace: "happ-notifications-microservice"
+            #         RunOrder: 1
 
-                  - 
-                    Name: "happ-survey-microservice"
-                    ActionTypeId: 
-                        Category: "Build"
-                        Owner: "AWS"
-                        Provider: "CodeBuild"
-                        Version: "1"
-                    Configuration: 
-                        ProjectName: "happ-survey"
-                    InputArtifacts: 
-                      - 
-                        Name: "SourceArtifact"
-                    Region: !Ref AWS::Region
-                    Namespace: "happ-survey-microservice"
-                    RunOrder: 1
+            #       - 
+            #         Name: "happ-survey-microservice"
+            #         ActionTypeId: 
+            #             Category: "Build"
+            #             Owner: "AWS"
+            #             Provider: "CodeBuild"
+            #             Version: "1"
+            #         Configuration: 
+            #             ProjectName: "happ-survey"
+            #         InputArtifacts: 
+            #           - 
+            #             Name: "SourceArtifact"
+            #         Region: !Ref AWS::Region
+            #         Namespace: "happ-survey-microservice"
+            #         RunOrder: 1
 #end pipeline creation
 
 
