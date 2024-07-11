@@ -62,13 +62,6 @@ plugins:
   - serverless-cloudformation-resource-counter
   # - serverless-api-gateway-throttling
 
-hooks:
-  before:deploy:deploy:
-    - echo "Pre-deploy: Logging current directory"
-    - pwd
-  after:deploy:deploy:
-    - echo "Post-deploy: Logging current directory"
-    - pwd
 # resources:
 #   Resources:
 #     FrontendBucket:
