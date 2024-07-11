@@ -1,4 +1,4 @@
-service: resource-creation
+service: happ-ms-resource-creation
 app: happ
 projectDir: ../
 configValidationMode: error
