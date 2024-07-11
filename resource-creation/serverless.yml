@@ -1,6 +1,6 @@
 service: happ-ms-resource-creation
 app: happ
-projectDir: ../
+# projectDir: ../
 configValidationMode: error
 variablesResolutionMode: 20210326
 
