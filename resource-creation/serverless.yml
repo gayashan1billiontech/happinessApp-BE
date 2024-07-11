@@ -1,12 +1,13 @@
 service: happ-ms-resource-creation
 app: happ
-# projectDir: ../
+projectDir: ../
 configValidationMode: error
 variablesResolutionMode: 20210326
 
 provider:
   name: aws
   region: ${file(../env.yml):${opt:stage}.region}
+  profile: TestHapinessML
   runtime: nodejs20.x
   timeout: 30
   stage: ${file(../env.yml):${opt:stage}.environment}
@@ -50,9 +51,13 @@ custom:
   warningThreshold: 100
    
 
-# functions:
-#   createSurvey:
-#     handler: route.createSurvey
+functions:
+  hello:
+    handler: route.hello
+    events:
+      - httpApi:
+          path: /resource-creation/hello
+          method: get
 
 
 plugins:
