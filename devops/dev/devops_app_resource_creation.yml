@@ -1,7 +1,8 @@
 version: 0.2
 
 env:
-  environment: "dev"
+  variables:
+    environment: "dev"
 
 phases:
   install:
