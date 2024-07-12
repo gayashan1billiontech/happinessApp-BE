@@ -412,7 +412,7 @@ resources:
     PrivateSubnet1:
       Type: AWS::EC2::Subnet
       Properties:
-        AvailabilityZone: ap-southeast-1a
+        AvailabilityZone: ap-south-1a
         CidrBlock: 10.0.64.0/18
         VpcId: 
           Ref: Vpc
@@ -420,7 +420,7 @@ resources:
     PrivateSubnet2:
       Type: AWS::EC2::Subnet
       Properties:
-        AvailabilityZone: ap-southeast-1b
+        AvailabilityZone: ap-south-1b
         CidrBlock: 10.0.128.0/18
         VpcId: 
           Ref: Vpc
