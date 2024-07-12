@@ -442,16 +442,12 @@ resources:
         DatabaseName: mydatabase
         Engine: aurora
         EngineMode: provisioned
-        ScalingConfiguration:
-          AutoPause: true
-          MinCapacity: 2
-          MaxCapacity: 8
+        EngineVersion: "5.6.10a"
         DBSubnetGroupName: ${self:provider.environment.DB_SUBNET_GROUP}
         DeletionProtection: true
         CopyTagsToSnapshot: true
         VpcSecurityGroupIds:
           - !GetAtt DatabaseVpcSecurityGroup.GroupId
-
 
     DBSubnetGroup:
       Type: "AWS::RDS::DBSubnetGroup"
