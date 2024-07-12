@@ -441,7 +441,7 @@ resources:
         MasterUserPassword: mypassword
         DatabaseName: mydatabase
         Engine: aurora
-        EngineMode: serverless
+        EngineMode: provisioned
         ScalingConfiguration:
           AutoPause: true
           MinCapacity: 2
@@ -473,4 +473,4 @@ resources:
             FromPort: 3306
             ToPort: 3306
         VpcId: 
-            Ref: Vpc
+          Ref: Vpc
