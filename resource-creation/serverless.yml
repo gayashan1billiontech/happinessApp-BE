@@ -74,13 +74,13 @@ resources:
       DeletionPolicy: Retain
       DependsOn: AccessLogsBucket
       Properties:
-        BucketName : ${self:provider.environment.FRONTEND_BUCKET}
-        PublicAccessBlockConfiguration :
+        BucketName: ${self:provider.environment.FRONTEND_BUCKET}
+        PublicAccessBlockConfiguration:
           BlockPublicAcls: true
           BlockPublicPolicy: false
           IgnorePublicAcls: true
           RestrictPublicBuckets: false
-        WebsiteConfiguration :
+        WebsiteConfiguration:
           ErrorDocument: index.html
           IndexDocument: index.html
         VersioningConfiguration:
@@ -106,13 +106,13 @@ resources:
       DeletionPolicy: Retain
       DependsOn: AccessLogsBucket
       Properties:
-        BucketName : ${self:provider.environment.UPLOAD_BUCKET}
-        PublicAccessBlockConfiguration :
+        BucketName: ${self:provider.environment.UPLOAD_BUCKET}
+        PublicAccessBlockConfiguration:
           BlockPublicAcls: true
-          BlockPublicPolicy: false #change false in initial deployment
+          BlockPublicPolicy: false
           IgnorePublicAcls: true
           RestrictPublicBuckets: true
-        CorsConfiguration :
+        CorsConfiguration:
           CorsRules:
             - AllowedHeaders: ['*']
               AllowedOrigins: ['*']
@@ -148,7 +148,7 @@ resources:
           BlockPublicPolicy: false
           IgnorePublicAcls: true
           RestrictPublicBuckets: false
-        CorsConfiguration :
+        CorsConfiguration:
           CorsRules:
             - AllowedHeaders: ['*']
               AllowedOrigins: ['*']
@@ -183,7 +183,6 @@ resources:
           BlockPublicPolicy: true
           IgnorePublicAcls: true
           RestrictPublicBuckets: true
-        AccessControl: LogDeliveryWrite
         BucketEncryption:
           ServerSideEncryptionConfiguration:
             - ServerSideEncryptionByDefault:
