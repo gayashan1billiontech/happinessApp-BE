@@ -293,109 +293,109 @@ resources:
               Resource:
                 Fn::Join: ['', ['arn:aws:s3:::', Ref: PublicBucket, '/*'] ]
     
-#     CognitoUserPoolApp:
-#       Type: AWS::Cognito::UserPool
-#       DeletionPolicy: Retain
-#       Properties:
-#         UserPoolName: ${self:provider.environment.USER_POOL_APP}
-#         UsernameAttributes:
-#           - email
-#         AutoVerifiedAttributes:
-#           - email
-#         EmailConfiguration:
-#           EmailSendingAccount: COGNITO_DEFAULT
-#         EmailVerificationSubject: 'Your Confirmation Code'
-#         EmailVerificationMessage: 'Your Confirmation Code is {####}.'
-#         Schema:
-#           - Name: email
-#             AttributeDataType: String
-#             Mutable: false
-#             Required: true
-#           - Name: lastName
-#             AttributeDataType: String
-#             Mutable: true
-#             Required: false
-#           - Name: type
-#             AttributeDataType: String
-#             Mutable: true
-#             Required: false
-#           - Name: primaryRole
-#             AttributeDataType: String
-#             Mutable: true
-#             Required: false
-#           - Name: organizationId
-#             AttributeDataType: Number
-#             Mutable: true
-#             Required: false
-#           - Name: userId
-#             AttributeDataType: String
-#             Mutable: false
-#             Required: false
+    CognitoUserPoolApp:
+      Type: AWS::Cognito::UserPool
+      DeletionPolicy: Retain
+      Properties:
+        UserPoolName: ${self:provider.environment.USER_POOL_APP}
+        UsernameAttributes:
+          - email
+        AutoVerifiedAttributes:
+          - email
+        EmailConfiguration:
+          EmailSendingAccount: COGNITO_DEFAULT
+        EmailVerificationSubject: 'Your Confirmation Code'
+        EmailVerificationMessage: 'Your Confirmation Code is {####}.'
+        Schema:
+          - Name: email
+            AttributeDataType: String
+            Mutable: false
+            Required: true
+          - Name: lastName
+            AttributeDataType: String
+            Mutable: true
+            Required: false
+          - Name: type
+            AttributeDataType: String
+            Mutable: true
+            Required: false
+          - Name: primaryRole
+            AttributeDataType: String
+            Mutable: true
+            Required: false
+          - Name: organizationId
+            AttributeDataType: Number
+            Mutable: true
+            Required: false
+          - Name: userId
+            AttributeDataType: String
+            Mutable: false
+            Required: false
 
-#     CognitoUserPoolClientApp:
-#       Type: AWS::Cognito::UserPoolClient
-#       DependsOn: CognitoUserPoolApp
-#       Properties:
-#         ClientName: ${self:provider.environment.USER_POOL_APP_CLIENT}
-#         UserPoolId:
-#           Ref: CognitoUserPoolApp
-#         ExplicitAuthFlows:
-#           - ALLOW_USER_PASSWORD_AUTH
-#           - ALLOW_USER_SRP_AUTH
-#           - ALLOW_REFRESH_TOKEN_AUTH
-#         GenerateSecret: false
+    CognitoUserPoolClientApp:
+      Type: AWS::Cognito::UserPoolClient
+      DependsOn: CognitoUserPoolApp
+      Properties:
+        ClientName: ${self:provider.environment.USER_POOL_APP_CLIENT}
+        UserPoolId:
+          Ref: CognitoUserPoolApp
+        ExplicitAuthFlows:
+          - ALLOW_USER_PASSWORD_AUTH
+          - ALLOW_USER_SRP_AUTH
+          - ALLOW_REFRESH_TOKEN_AUTH
+        GenerateSecret: false
 
-#     CognitoUserPoolAdmin:
-#       Type: AWS::Cognito::UserPool
-#       DeletionPolicy: Retain
-#       Properties:
-#         UserPoolName: ${self:provider.environment.USER_POOL_ADMIN}
-#         UsernameAttributes:
-#           - email
-#         AutoVerifiedAttributes:
-#           - email
-#         EmailConfiguration:
-#           EmailSendingAccount: COGNITO_DEFAULT
-#         EmailVerificationSubject: 'Your Confirmation Code'
-#         EmailVerificationMessage: 'Your Confirmation Code is {####}.'
-#         Schema:
-#           - Name: email
-#             AttributeDataType: String
-#             Mutable: false
-#             Required: true
-#           - Name: lastName
-#             AttributeDataType: String
-#             Mutable: true
-#             Required: false
-#           - Name: type
-#             AttributeDataType: String
-#             Mutable: true
-#             Required: false
-#           - Name: primaryRole
-#             AttributeDataType: String
-#             Mutable: true
-#             Required: false
-#           - Name: organizationId
-#             AttributeDataType: Number
-#             Mutable: true
-#             Required: false
-#           - Name: userId
-#             AttributeDataType: String
-#             Mutable: false
-#             Required: false
+    CognitoUserPoolAdmin:
+      Type: AWS::Cognito::UserPool
+      DeletionPolicy: Retain
+      Properties:
+        UserPoolName: ${self:provider.environment.USER_POOL_ADMIN}
+        UsernameAttributes:
+          - email
+        AutoVerifiedAttributes:
+          - email
+        EmailConfiguration:
+          EmailSendingAccount: COGNITO_DEFAULT
+        EmailVerificationSubject: 'Your Confirmation Code'
+        EmailVerificationMessage: 'Your Confirmation Code is {####}.'
+        Schema:
+          - Name: email
+            AttributeDataType: String
+            Mutable: false
+            Required: true
+          - Name: lastName
+            AttributeDataType: String
+            Mutable: true
+            Required: false
+          - Name: type
+            AttributeDataType: String
+            Mutable: true
+            Required: false
+          - Name: primaryRole
+            AttributeDataType: String
+            Mutable: true
+            Required: false
+          - Name: organizationId
+            AttributeDataType: Number
+            Mutable: true
+            Required: false
+          - Name: userId
+            AttributeDataType: String
+            Mutable: false
+            Required: false
 
-#     CognitoUserPoolClientAdmin:
-#       Type: AWS::Cognito::UserPoolClient
-#       DependsOn: CognitoUserPoolAdmin
-#       Properties:
-#         ClientName: ${self:provider.environment.USER_POOL_ADMIN_CLIENT}
-#         UserPoolId:
-#           Ref: CognitoUserPoolAdmin
-#         ExplicitAuthFlows:
-#           - ALLOW_USER_PASSWORD_AUTH
-#           - ALLOW_USER_SRP_AUTH
-#           - ALLOW_REFRESH_TOKEN_AUTH
-#         GenerateSecret: false
+    CognitoUserPoolClientAdmin:
+      Type: AWS::Cognito::UserPoolClient
+      DependsOn: CognitoUserPoolAdmin
+      Properties:
+        ClientName: ${self:provider.environment.USER_POOL_ADMIN_CLIENT}
+        UserPoolId:
+          Ref: CognitoUserPoolAdmin
+        ExplicitAuthFlows:
+          - ALLOW_USER_PASSWORD_AUTH
+          - ALLOW_USER_SRP_AUTH
+          - ALLOW_REFRESH_TOKEN_AUTH
+        GenerateSecret: false
 
 #     Vpc:
 #       Type: AWS::EC2::VPC
