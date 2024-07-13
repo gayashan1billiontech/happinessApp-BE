@@ -465,7 +465,7 @@ resources:
       Type: AWS::RDS::DBInstance
       Properties:
         DBClusterIdentifier: !Ref MyDBCluster
-        DBInstanceClass: db.r6g.large
+        DBInstanceClass: db.t3.micro # db.r6g.large add this when create dev env
         DBSubnetGroupName: !Ref DBSubnetGroup
         Engine: mysql
         PubliclyAccessible: false
