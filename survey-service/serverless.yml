@@ -142,7 +142,7 @@ resources:
         RestApiId:
           Ref: ApiGatewayRestApi
         Type: COGNITO_USER_POOLS
-        Name: Authorizer
+        Name: AuthorizerAdmin
         ProviderARNs:
           - Fn::Join:
               - ''
