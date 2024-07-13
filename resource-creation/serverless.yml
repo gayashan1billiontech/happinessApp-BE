@@ -454,8 +454,8 @@ resources:
         MasterUsername: admin
         MasterUserPassword: mypassword
         DatabaseName: mydatabase
-        Engine: aurora-mysql
-        DBSubnetGroupName: !Ref DBSubnetGroup
+        Engine: msql
+        DBSubnetGryoupName: !Ref DBSubnetGroup
         DeletionProtection: true
         CopyTagsToSnapshot: true
         VpcSecurityGroupIds:
@@ -465,9 +465,9 @@ resources:
       Type: AWS::RDS::DBInstance
       Properties:
         DBClusterIdentifier: !Ref MyDBCluster
-        DBInstanceClass: db.t2.small
+        DBInstanceClass: db.r6g.large
         DBSubnetGroupName: !Ref DBSubnetGroup
-        Engine: aurora-mysql
+        Engine: mysql
         PubliclyAccessible: false
 
     
