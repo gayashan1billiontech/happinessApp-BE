@@ -455,7 +455,6 @@ resources:
         MasterUserPassword: mypassword
         DatabaseName: mydatabase
         Engine: aurora-mysql
-        EngineMode: serverless
         DBSubnetGroupName: !Ref DBSubnetGroup
         DeletionProtection: true
         CopyTagsToSnapshot: true
@@ -466,7 +465,7 @@ resources:
       Type: AWS::RDS::DBInstance
       Properties:
         DBClusterIdentifier: !Ref MyDBCluster
-        DBInstanceClass: db.t2.micro
+        DBInstanceClass: db.t2.small
         DBSubnetGroupName: !Ref DBSubnetGroup
         Engine: aurora-mysql
         PubliclyAccessible: false
