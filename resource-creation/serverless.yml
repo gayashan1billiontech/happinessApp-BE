@@ -455,8 +455,7 @@ resources:
         MasterUserPassword: mypassword
         DatabaseName: mydatabase
         Engine: aurora-mysql
-        EngineMode: provisioned
-        EngineVersion: '8.0'
+        EngineMode: serverless
         DBSubnetGroupName: !Ref DBSubnetGroup
         DeletionProtection: true
         CopyTagsToSnapshot: true
@@ -470,7 +469,6 @@ resources:
         DBInstanceClass: db.t2.micro
         DBSubnetGroupName: !Ref DBSubnetGroup
         Engine: aurora-mysql
-        EngineVersion: '8.0'
         PubliclyAccessible: false
 
     
