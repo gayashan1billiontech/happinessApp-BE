@@ -455,7 +455,7 @@ resources:
         MasterUserPassword: mypassword
         DatabaseName: mydatabase
         Engine: msql
-        DBSubnetGryoupName: !Ref DBSubnetGroup
+        DBSubnetGroupName: !Ref DBSubnetGroup
         DeletionProtection: true
         CopyTagsToSnapshot: true
         VpcSecurityGroupIds:
