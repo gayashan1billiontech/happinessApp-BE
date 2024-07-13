@@ -658,6 +658,151 @@ Resources:
                     Status: "DISABLED"
                     EncryptionDisabled: false
 
+    CodeBuildUser:
+        Type: "AWS::CodeBuild::Project"
+        DependsOn:
+          - CodebuildUserRole
+        Properties:
+            Name: "happ-app-user"
+            Source: 
+                BuildSpec: "devops/dev/devops_app_user.yml"
+                InsecureSsl: false
+                Type: "CODEPIPELINE"
+            Artifacts: 
+                EncryptionDisabled: false
+                Name: "happ-app-user"
+                Packaging: "NONE"
+                Type: "CODEPIPELINE"
+            Cache: 
+                Type: "NO_CACHE"
+            Environment: 
+                ComputeType: "BUILD_GENERAL1_SMALL"
+                Image: "aws/codebuild/standard:5.0"
+                ImagePullCredentialsType: "CODEBUILD"
+                PrivilegedMode: false
+                Type: "LINUX_CONTAINER"
+            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-app-user-service-${AWS::Region}-role"
+            TimeoutInMinutes: 60
+            QueuedTimeoutInMinutes: 480
+            EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
+            BadgeEnabled: false
+            LogsConfig: 
+                CloudWatchLogs: 
+                    Status: "ENABLED"
+                    GroupName: "happ_app_user_microservice"
+                S3Logs: 
+                    Status: "DISABLED"
+                    EncryptionDisabled: false
+
+    CodeBuildAdminUser:
+        Type: "AWS::CodeBuild::Project"
+        DependsOn:
+          - CodebuildAdminUserRole
+        Properties:
+            Name: "happ-admin-user"
+            Source: 
+                BuildSpec: "devops/dev/devops_admin_user.yml"
+                InsecureSsl: false
+                Type: "CODEPIPELINE"
+            Artifacts: 
+                EncryptionDisabled: false
+                Name: "happ-admin-user"
+                Packaging: "NONE"
+                Type: "CODEPIPELINE"
+            Cache: 
+                Type: "NO_CACHE"
+            Environment: 
+                ComputeType: "BUILD_GENERAL1_SMALL"
+                Image: "aws/codebuild/standard:5.0"
+                ImagePullCredentialsType: "CODEBUILD"
+                PrivilegedMode: false
+                Type: "LINUX_CONTAINER"
+            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-admin-user-service-${AWS::Region}-role"
+            TimeoutInMinutes: 60
+            QueuedTimeoutInMinutes: 480
+            EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
+            BadgeEnabled: false
+            LogsConfig: 
+                CloudWatchLogs: 
+                    Status: "ENABLED"
+                    GroupName: "happ_admin_user_microservice"
+                S3Logs: 
+                    Status: "DISABLED"
+                    EncryptionDisabled: false
+
+    CodeBuildNotifications:
+        Type: "AWS::CodeBuild::Project"
+        DependsOn:
+          - CodebuildNotificationsRole
+        Properties:
+            Name: "happ-notification"
+            Source: 
+                BuildSpec: "devops/dev/devops_notification_service.yml"
+                InsecureSsl: false
+                Type: "CODEPIPELINE"
+            Artifacts: 
+                EncryptionDisabled: false
+                Name: "happ-notification"
+                Packaging: "NONE"
+                Type: "CODEPIPELINE"
+            Cache: 
+                Type: "NO_CACHE"
+            Environment: 
+                ComputeType: "BUILD_GENERAL1_SMALL"
+                Image: "aws/codebuild/standard:5.0"
+                ImagePullCredentialsType: "CODEBUILD"
+                PrivilegedMode: false
+                Type: "LINUX_CONTAINER"
+            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-notifications-service-${AWS::Region}-role"
+            TimeoutInMinutes: 60
+            QueuedTimeoutInMinutes: 480
+            EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
+            BadgeEnabled: false
+            LogsConfig: 
+                CloudWatchLogs: 
+                    Status: "ENABLED"
+                    GroupName: "happ_notifications_microservice"
+                S3Logs: 
+                    Status: "DISABLED"
+                    EncryptionDisabled: false
+
+    CodeBuildSurvey:
+        Type: "AWS::CodeBuild::Project"
+        DependsOn:
+          - CodebuildSurveyRole
+        Properties:
+            Name: !Sub "happ-survey"
+            Source: 
+                BuildSpec: "devops/dev/devops_survey_service.yml"
+                InsecureSsl: false
+                Type: "CODEPIPELINE"
+            Artifacts: 
+                EncryptionDisabled: false
+                Name: !Sub "happ-survey"
+                Packaging: "NONE"
+                Type: "CODEPIPELINE"
+            Cache: 
+                Type: "NO_CACHE"
+            Environment: 
+                ComputeType: "BUILD_GENERAL1_SMALL"
+                Image: "aws/codebuild/standard:5.0"
+                ImagePullCredentialsType: "CODEBUILD"
+                PrivilegedMode: false
+                Type: "LINUX_CONTAINER"
+            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-survey-service-${AWS::Region}-role"
+            TimeoutInMinutes: 60
+            QueuedTimeoutInMinutes: 480
+            EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
+            BadgeEnabled: false
+            LogsConfig: 
+                CloudWatchLogs: 
+                    Status: "ENABLED"
+                    GroupName: "happ_survey_microservice"
+                S3Logs: 
+                    Status: "DISABLED"
+                    EncryptionDisabled: false
+
+
 #end codeBuild creation
 
 #start s3 bucket creation
@@ -735,6 +880,75 @@ Resources:
                         Name: "SourceArtifact"
                     Region: !Ref AWS::Region
                     Namespace: "tpip-prerequisite-microservice"
+                    RunOrder: 1
+                
+              - 
+                Name: "User-services"
+                Actions: 
+                  - 
+                    Name: "happ-app-user-microservice"
+                    ActionTypeId: 
+                        Category: "Build"
+                        Owner: "AWS"
+                        Provider: "CodeBuild"
+                        Version: "1"
+                    Configuration: 
+                        ProjectName: "happ-app-user"
+                    InputArtifacts: 
+                      - 
+                        Name: "SourceArtifact"
+                    Region: !Ref AWS::Region
+                    Namespace: "happ-app-user-microservice"
+                    RunOrder: 1
+                  - 
+                    Name: "happ-admin-user-microservice"
+                    ActionTypeId: 
+                        Category: "Build"
+                        Owner: "AWS"
+                        Provider: "CodeBuild"
+                        Version: "1"
+                    Configuration: 
+                        ProjectName: "happ-admin-user"
+                    InputArtifacts: 
+                      - 
+                        Name: "SourceArtifact"
+                    Region: !Ref AWS::Region
+                    Namespace: "happ-admin-user-microservice"
+                    RunOrder: 1
+
+              - 
+                Name: "Build services"
+                Actions: 
+                  - 
+                    Name: "happ-notifications-microservice"
+                    ActionTypeId: 
+                        Category: "Build"
+                        Owner: "AWS"
+                        Provider: "CodeBuild"
+                        Version: "1"
+                    Configuration: 
+                        ProjectName: "happ-notifications"
+                    InputArtifacts: 
+                      - 
+                        Name: "SourceArtifact"
+                    Region: !Ref AWS::Region
+                    Namespace: "happ-notifications-microservice"
+                    RunOrder: 1
+
+                  - 
+                    Name: "happ-survey-microservice"
+                    ActionTypeId: 
+                        Category: "Build"
+                        Owner: "AWS"
+                        Provider: "CodeBuild"
+                        Version: "1"
+                    Configuration: 
+                        ProjectName: "happ-survey"
+                    InputArtifacts: 
+                      - 
+                        Name: "SourceArtifact"
+                    Region: !Ref AWS::Region
+                    Namespace: "happ-survey-microservice"
                     RunOrder: 1
 
 #end pipeline creation

@@ -1,4 +1,4 @@
-service: happ-ms-resource-creation
+service: happ-ms-admin-user
 app: happ
 projectDir: ../
 configValidationMode: error
@@ -7,7 +7,6 @@ variablesResolutionMode: 20210326
 provider:
   name: aws
   region: ap-south-1
-  # profile: TestHapinessML
   runtime: nodejs20.x
   timeout: 30
   stage: ${opt:stage}
