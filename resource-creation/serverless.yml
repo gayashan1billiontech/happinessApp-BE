@@ -65,7 +65,7 @@ plugins:
   - serverless-cloudformation-resource-counter
 
 resources:
-  resources:
+  Resources:
     FrontendBucket:
       Type: AWS::S3::Bucket
       DeletionPolicy: Retain
