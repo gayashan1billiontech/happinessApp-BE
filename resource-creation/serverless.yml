@@ -68,6 +68,31 @@ plugins:
 
 resources:
   Resources:
+
+    ApiGatewayCloudWatchRole:
+      Type: AWS::IAM::Role
+      Properties: 
+        RoleName: serverlessApiGatewayCloudWatchRole
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - apigateway.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+          - PolicyName: ApiGatewayCloudWatchPolicy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource: 'arn:aws:logs:*:*:*'
+
     FrontendBucket:
       Type: AWS::S3::Bucket
       DeletionPolicy: Retain
@@ -521,6 +546,11 @@ resources:
                 - Ref: AWS::AccountId
                 - ':userpool/'
                 - Ref: CognitoUserPoolAdmin
+
+    ApiGatewayAccount:
+      Type: AWS::ApiGateway::Account
+      Properties:
+        CloudWatchRoleArn: !GetAtt ApiGatewayCloudWatchRole.Arn
 
   Outputs:
     AdminUserPoolId:
