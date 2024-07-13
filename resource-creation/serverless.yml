@@ -463,7 +463,6 @@ resources:
       Type: AWS::RDS::DBCluster
       Properties:
         DBClusterIdentifier: my-cluster
-        DBClusterInstanceClass: db.r6g.large
         MasterUsername: admin
         MasterUserPassword: mypassword
         DatabaseName: mydatabase
