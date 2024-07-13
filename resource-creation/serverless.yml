@@ -401,6 +401,9 @@ resources:
       Properties: 
         CidrBlock: 10.0.0.0/16
         InstanceTenancy: default
+        Tags:
+        - Key: Name
+          Value: happiness-app-rds-VPC
 
     PublicSubnet:
       Type: AWS::EC2::Subnet
@@ -460,12 +463,11 @@ resources:
       Type: AWS::RDS::DBCluster
       Properties:
         DBClusterIdentifier: my-cluster
-        DBClusterInstanceClass: db.t3.micro # db.r6g.large add this when create dev env
+        DBClusterInstanceClass: db.r6g.large
         MasterUsername: admin
         MasterUserPassword: mypassword
         DatabaseName: mydatabase
-        AllocatedStorage: 20
-        Engine: mysql
+        Engine: aurora-mysql
         DBSubnetGroupName: !Ref DBSubnetGroup
         DeletionProtection: true
         CopyTagsToSnapshot: true
@@ -476,9 +478,9 @@ resources:
       Type: AWS::RDS::DBInstance
       Properties:
         DBClusterIdentifier: !Ref MyDBCluster
-        DBInstanceClass: db.t3.micro # db.r6g.large add this when create dev env
+        DBInstanceClass: db.r6g.large
         DBSubnetGroupName: !Ref DBSubnetGroup
-        Engine: mysql
+        Engine: aurora-mysql
         PubliclyAccessible: false
 
     
