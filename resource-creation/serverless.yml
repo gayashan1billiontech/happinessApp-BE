@@ -457,7 +457,7 @@ resources:
         Engine: aurora-mysql
         EngineMode: provisioned
         EngineVersion: '8.0'
-        DBSubnetGroupName: !Ref DBSubnetGroup
+        DBSubnetGroupName: PrivateDbSubnet
         DeletionProtection: true
         CopyTagsToSnapshot: true
         VpcSecurityGroupIds:
