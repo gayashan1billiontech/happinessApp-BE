@@ -69,332 +69,332 @@ plugins:
 
 resources:
   Resources:
-    FrontendBucket:
-      Type: AWS::S3::Bucket
-      DeletionPolicy: Retain
-      DependsOn: AccessLogsBucket
-      Properties:
-        BucketName: ${self:provider.environment.FRONTEND_BUCKET}
-        PublicAccessBlockConfiguration:
-          BlockPublicAcls: true
-          BlockPublicPolicy: false
-          IgnorePublicAcls: true
-          RestrictPublicBuckets: false
-        WebsiteConfiguration:
-          ErrorDocument: index.html
-          IndexDocument: index.html
-        VersioningConfiguration:
-          Status: Enabled
-        LifecycleConfiguration:
-          Rules:
-            - Id: Old_Objects_Moving_Rule
-              Status: Enabled
-              NoncurrentVersionTransition:
-                NewerNoncurrentVersions: 10
-                TransitionInDays: 14
-                StorageClass: INTELLIGENT_TIERING
-        LoggingConfiguration:
-          DestinationBucketName: happ-${self:provider.stage}-access-logs
-          LogFilePrefix: happ-${self:provider.stage}
-        BucketEncryption:
-          ServerSideEncryptionConfiguration:
-            - ServerSideEncryptionByDefault:
-                SSEAlgorithm: AES256
+    # FrontendBucket:
+    #   Type: AWS::S3::Bucket
+    #   DeletionPolicy: Retain
+    #   DependsOn: AccessLogsBucket
+    #   Properties:
+    #     BucketName: ${self:provider.environment.FRONTEND_BUCKET}
+    #     PublicAccessBlockConfiguration:
+    #       BlockPublicAcls: true
+    #       BlockPublicPolicy: false
+    #       IgnorePublicAcls: true
+    #       RestrictPublicBuckets: false
+    #     WebsiteConfiguration:
+    #       ErrorDocument: index.html
+    #       IndexDocument: index.html
+    #     VersioningConfiguration:
+    #       Status: Enabled
+    #     LifecycleConfiguration:
+    #       Rules:
+    #         - Id: Old_Objects_Moving_Rule
+    #           Status: Enabled
+    #           NoncurrentVersionTransition:
+    #             NewerNoncurrentVersions: 10
+    #             TransitionInDays: 14
+    #             StorageClass: INTELLIGENT_TIERING
+    #     LoggingConfiguration:
+    #       DestinationBucketName: happ-${self:provider.stage}-access-logs
+    #       LogFilePrefix: happ-${self:provider.stage}
+    #     BucketEncryption:
+    #       ServerSideEncryptionConfiguration:
+    #         - ServerSideEncryptionByDefault:
+    #             SSEAlgorithm: AES256
     
-    UploadBucket:
-      Type: AWS::S3::Bucket
-      DeletionPolicy: Retain
-      DependsOn: AccessLogsBucket
-      Properties:
-        BucketName: ${self:provider.environment.UPLOAD_BUCKET}
-        PublicAccessBlockConfiguration:
-          BlockPublicAcls: true
-          BlockPublicPolicy: false
-          IgnorePublicAcls: true
-          RestrictPublicBuckets: true
-        CorsConfiguration:
-          CorsRules:
-            - AllowedHeaders: ['*']
-              AllowedOrigins: ['*']
-              AllowedMethods: ['PUT', 'GET']
-              ExposedHeaders: ['ETag']
-              MaxAge: '3000'
-        VersioningConfiguration:
-          Status: Enabled
-        BucketEncryption:
-          ServerSideEncryptionConfiguration:
-            - ServerSideEncryptionByDefault:
-                SSEAlgorithm: AES256
-        LifecycleConfiguration:
-          Rules:
-            - Id: Old_Objects_Moving_Rule
-              Status: Enabled
-              NoncurrentVersionTransition:
-                NewerNoncurrentVersions: 10
-                TransitionInDays: 14
-                StorageClass: INTELLIGENT_TIERING
-        LoggingConfiguration:
-          DestinationBucketName: happ-${self:provider.stage}-access-logs
-          LogFilePrefix: happ-${self:provider.stage}
+    # UploadBucket:
+    #   Type: AWS::S3::Bucket
+    #   DeletionPolicy: Retain
+    #   DependsOn: AccessLogsBucket
+    #   Properties:
+    #     BucketName: ${self:provider.environment.UPLOAD_BUCKET}
+    #     PublicAccessBlockConfiguration:
+    #       BlockPublicAcls: true
+    #       BlockPublicPolicy: false
+    #       IgnorePublicAcls: true
+    #       RestrictPublicBuckets: true
+    #     CorsConfiguration:
+    #       CorsRules:
+    #         - AllowedHeaders: ['*']
+    #           AllowedOrigins: ['*']
+    #           AllowedMethods: ['PUT', 'GET']
+    #           ExposedHeaders: ['ETag']
+    #           MaxAge: '3000'
+    #     VersioningConfiguration:
+    #       Status: Enabled
+    #     BucketEncryption:
+    #       ServerSideEncryptionConfiguration:
+    #         - ServerSideEncryptionByDefault:
+    #             SSEAlgorithm: AES256
+    #     LifecycleConfiguration:
+    #       Rules:
+    #         - Id: Old_Objects_Moving_Rule
+    #           Status: Enabled
+    #           NoncurrentVersionTransition:
+    #             NewerNoncurrentVersions: 10
+    #             TransitionInDays: 14
+    #             StorageClass: INTELLIGENT_TIERING
+    #     LoggingConfiguration:
+    #       DestinationBucketName: happ-${self:provider.stage}-access-logs
+    #       LogFilePrefix: happ-${self:provider.stage}
 
-    PublicBucket:
-      Type: AWS::S3::Bucket
-      DeletionPolicy: Retain
-      DependsOn: AccessLogsBucket
-      Properties:
-        BucketName: ${self:provider.environment.PUBLIC_BUCKET}
-        PublicAccessBlockConfiguration:
-          BlockPublicAcls: true
-          BlockPublicPolicy: false
-          IgnorePublicAcls: true
-          RestrictPublicBuckets: false
-        CorsConfiguration:
-          CorsRules:
-            - AllowedHeaders: ['*']
-              AllowedOrigins: ['*']
-              AllowedMethods: ['PUT', 'GET']
-              ExposedHeaders: ['ETag']
-              MaxAge: '3000'
-        VersioningConfiguration:
-          Status: Enabled
-        BucketEncryption:
-          ServerSideEncryptionConfiguration:
-            - ServerSideEncryptionByDefault:
-                SSEAlgorithm: AES256
-        LifecycleConfiguration:
-          Rules:
-            - Id: Old_Objects_Moving_Rule
-              Status: Enabled
-              NoncurrentVersionTransition:
-                NewerNoncurrentVersions: 10
-                TransitionInDays: 14
-                StorageClass: INTELLIGENT_TIERING
-        LoggingConfiguration:
-          DestinationBucketName: happ-${self:provider.stage}-access-logs
-          LogFilePrefix: happ-${self:provider.stage}
+    # PublicBucket:
+    #   Type: AWS::S3::Bucket
+    #   DeletionPolicy: Retain
+    #   DependsOn: AccessLogsBucket
+    #   Properties:
+    #     BucketName: ${self:provider.environment.PUBLIC_BUCKET}
+    #     PublicAccessBlockConfiguration:
+    #       BlockPublicAcls: true
+    #       BlockPublicPolicy: false
+    #       IgnorePublicAcls: true
+    #       RestrictPublicBuckets: false
+    #     CorsConfiguration:
+    #       CorsRules:
+    #         - AllowedHeaders: ['*']
+    #           AllowedOrigins: ['*']
+    #           AllowedMethods: ['PUT', 'GET']
+    #           ExposedHeaders: ['ETag']
+    #           MaxAge: '3000'
+    #     VersioningConfiguration:
+    #       Status: Enabled
+    #     BucketEncryption:
+    #       ServerSideEncryptionConfiguration:
+    #         - ServerSideEncryptionByDefault:
+    #             SSEAlgorithm: AES256
+    #     LifecycleConfiguration:
+    #       Rules:
+    #         - Id: Old_Objects_Moving_Rule
+    #           Status: Enabled
+    #           NoncurrentVersionTransition:
+    #             NewerNoncurrentVersions: 10
+    #             TransitionInDays: 14
+    #             StorageClass: INTELLIGENT_TIERING
+    #     LoggingConfiguration:
+    #       DestinationBucketName: happ-${self:provider.stage}-access-logs
+    #       LogFilePrefix: happ-${self:provider.stage}
 
-    AccessLogsBucket:
-      Type: AWS::S3::Bucket
-      DeletionPolicy: Retain
-      Properties:
-        BucketName: ${self:provider.environment.ACCESS_LOGS_BUCKET}
-        PublicAccessBlockConfiguration:
-          BlockPublicAcls: true
-          BlockPublicPolicy: true
-          IgnorePublicAcls: true
-          RestrictPublicBuckets: true
-        BucketEncryption:
-          ServerSideEncryptionConfiguration:
-            - ServerSideEncryptionByDefault:
-                SSEAlgorithm: AES256
+    # AccessLogsBucket:
+    #   Type: AWS::S3::Bucket
+    #   DeletionPolicy: Retain
+    #   Properties:
+    #     BucketName: ${self:provider.environment.ACCESS_LOGS_BUCKET}
+    #     PublicAccessBlockConfiguration:
+    #       BlockPublicAcls: true
+    #       BlockPublicPolicy: true
+    #       IgnorePublicAcls: true
+    #       RestrictPublicBuckets: true
+    #     BucketEncryption:
+    #       ServerSideEncryptionConfiguration:
+    #         - ServerSideEncryptionByDefault:
+    #             SSEAlgorithm: AES256
 
-    FrontendBucketPolicy:
-      Type: AWS::S3::BucketPolicy
-      DependsOn: FrontendBucket
-      Properties:
-        Bucket:
-          Ref: "FrontendBucket"
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-            - Sid: PublicWritePutObjectDeny
-              Effect: Deny
-              Principal: "*"
-              Action: s3:PutObject
-              Resource:
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: FrontendBucket,'/*','.exe' ] ]
-            - Sid: PublicReadGetObject
-              Effect: Allow
-              Principal: "*"
-              Action: s3:GetObject
-              Resource:
-                Fn::Join: ['', ['arn:aws:s3:::', Ref: FrontendBucket, '/*'] ]
+    # FrontendBucketPolicy:
+    #   Type: AWS::S3::BucketPolicy
+    #   DependsOn: FrontendBucket
+    #   Properties:
+    #     Bucket:
+    #       Ref: "FrontendBucket"
+    #     PolicyDocument:
+    #       Version: '2012-10-17'
+    #       Statement:
+    #         - Sid: PublicWritePutObjectDeny
+    #           Effect: Deny
+    #           Principal: "*"
+    #           Action: s3:PutObject
+    #           Resource:
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: FrontendBucket,'/*','.exe' ] ]
+    #         - Sid: PublicReadGetObject
+    #           Effect: Allow
+    #           Principal: "*"
+    #           Action: s3:GetObject
+    #           Resource:
+    #             Fn::Join: ['', ['arn:aws:s3:::', Ref: FrontendBucket, '/*'] ]
 
-    UploadBucketPolicy:
-      Type: AWS::S3::BucketPolicy
-      DependsOn: UploadBucket
-      Properties:
-        Bucket:
-          Ref: "UploadBucket"
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-            - Sid: PublicWritePutObject
-              Effect: Allow
-              Principal: "*"
-              Action: s3:PutObject
-              Resource:
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.jpeg' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.jpg' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.pdf' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.csv' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.doc' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.docx' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.xls' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.xlsx' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.JPEG' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.JPG' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.PDF' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.CSV' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.DOC' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.DOCX' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.XLS' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.XLSX' ] ]
-            - Sid: PublicWritePutObjectDeny
-              Effect: Deny
-              Principal: "*"
-              Action: s3:PutObject
-              NotResource:
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.jpeg' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.jpg' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.pdf' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.csv' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.doc' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.docx' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.xls' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.xlsx' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.JPEG' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.JPG' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.PDF' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.CSV' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.DOC' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.DOCX' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.XLS' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.XLSX' ] ]
+    # UploadBucketPolicy:
+    #   Type: AWS::S3::BucketPolicy
+    #   DependsOn: UploadBucket
+    #   Properties:
+    #     Bucket:
+    #       Ref: "UploadBucket"
+    #     PolicyDocument:
+    #       Version: '2012-10-17'
+    #       Statement:
+    #         - Sid: PublicWritePutObject
+    #           Effect: Allow
+    #           Principal: "*"
+    #           Action: s3:PutObject
+    #           Resource:
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.jpeg' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.jpg' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.pdf' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.csv' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.doc' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.docx' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.xls' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.xlsx' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.JPEG' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.JPG' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.PDF' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.CSV' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.DOC' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.DOCX' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.XLS' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.XLSX' ] ]
+    #         - Sid: PublicWritePutObjectDeny
+    #           Effect: Deny
+    #           Principal: "*"
+    #           Action: s3:PutObject
+    #           NotResource:
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.jpeg' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.jpg' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.pdf' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.csv' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.doc' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.docx' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.xls' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.xlsx' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.JPEG' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.JPG' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.PDF' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.CSV' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.DOC' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.DOCX' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.XLS' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: UploadBucket,'/*','.XLSX' ] ]
 
-    PublicBucketPolicy:
-      Type: AWS::S3::BucketPolicy
-      DependsOn: PublicBucket
-      Properties:
-        Bucket:
-          Ref: "PublicBucket"
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-            - Sid: PublicWritePutObject
-              Effect: Allow
-              Principal: "*"
-              Action: s3:PutObject
-              Resource:
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: PublicBucket,'/*','.jpeg' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: PublicBucket,'/*','.jpg' ] ]
-            - Sid: PublicWritePutObjectDeny
-              Effect: Deny
-              Principal: "*"
-              Action: s3:PutObject
-              NotResource:
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: PublicBucket,'/*','.jpeg' ] ]
-                - !Join [ '', [ 'arn:aws:s3:::', Ref: PublicBucket,'/*','.jpg' ] ]
-            - Sid: PublicReadGetObject
-              Effect: Allow
-              Principal: "*"
-              Action: s3:GetObject
-              Resource:
-                Fn::Join: ['', ['arn:aws:s3:::', Ref: PublicBucket, '/*'] ]
+    # PublicBucketPolicy:
+    #   Type: AWS::S3::BucketPolicy
+    #   DependsOn: PublicBucket
+    #   Properties:
+    #     Bucket:
+    #       Ref: "PublicBucket"
+    #     PolicyDocument:
+    #       Version: '2012-10-17'
+    #       Statement:
+    #         - Sid: PublicWritePutObject
+    #           Effect: Allow
+    #           Principal: "*"
+    #           Action: s3:PutObject
+    #           Resource:
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: PublicBucket,'/*','.jpeg' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: PublicBucket,'/*','.jpg' ] ]
+    #         - Sid: PublicWritePutObjectDeny
+    #           Effect: Deny
+    #           Principal: "*"
+    #           Action: s3:PutObject
+    #           NotResource:
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: PublicBucket,'/*','.jpeg' ] ]
+    #             - !Join [ '', [ 'arn:aws:s3:::', Ref: PublicBucket,'/*','.jpg' ] ]
+    #         - Sid: PublicReadGetObject
+    #           Effect: Allow
+    #           Principal: "*"
+    #           Action: s3:GetObject
+    #           Resource:
+    #             Fn::Join: ['', ['arn:aws:s3:::', Ref: PublicBucket, '/*'] ]
     
-    CognitoUserPoolApp:
-      Type: AWS::Cognito::UserPool
-      DeletionPolicy: Retain
-      Properties:
-        UserPoolName: ${self:provider.environment.USER_POOL_APP}
-        UsernameAttributes:
-          - email
-        AutoVerifiedAttributes:
-          - email
-        EmailConfiguration:
-          EmailSendingAccount: COGNITO_DEFAULT
-        EmailVerificationSubject: 'Your Confirmation Code'
-        EmailVerificationMessage: 'Your Confirmation Code is {####}.'
-        Schema:
-          - Name: email
-            AttributeDataType: String
-            Mutable: false
-            Required: true
-          - Name: lastName
-            AttributeDataType: String
-            Mutable: true
-            Required: false
-          - Name: type
-            AttributeDataType: String
-            Mutable: true
-            Required: false
-          - Name: primaryRole
-            AttributeDataType: String
-            Mutable: true
-            Required: false
-          - Name: organizationId
-            AttributeDataType: Number
-            Mutable: true
-            Required: false
-          - Name: userId
-            AttributeDataType: String
-            Mutable: false
-            Required: false
+    # CognitoUserPoolApp:
+    #   Type: AWS::Cognito::UserPool
+    #   DeletionPolicy: Retain
+    #   Properties:
+    #     UserPoolName: ${self:provider.environment.USER_POOL_APP}
+    #     UsernameAttributes:
+    #       - email
+    #     AutoVerifiedAttributes:
+    #       - email
+    #     EmailConfiguration:
+    #       EmailSendingAccount: COGNITO_DEFAULT
+    #     EmailVerificationSubject: 'Your Confirmation Code'
+    #     EmailVerificationMessage: 'Your Confirmation Code is {####}.'
+    #     Schema:
+    #       - Name: email
+    #         AttributeDataType: String
+    #         Mutable: false
+    #         Required: true
+    #       - Name: lastName
+    #         AttributeDataType: String
+    #         Mutable: true
+    #         Required: false
+    #       - Name: type
+    #         AttributeDataType: String
+    #         Mutable: true
+    #         Required: false
+    #       - Name: primaryRole
+    #         AttributeDataType: String
+    #         Mutable: true
+    #         Required: false
+    #       - Name: organizationId
+    #         AttributeDataType: Number
+    #         Mutable: true
+    #         Required: false
+    #       - Name: userId
+    #         AttributeDataType: String
+    #         Mutable: false
+    #         Required: false
 
-    CognitoUserPoolClientApp:
-      Type: AWS::Cognito::UserPoolClient
-      DependsOn: CognitoUserPoolApp
-      Properties:
-        ClientName: ${self:provider.environment.USER_POOL_APP_CLIENT}
-        UserPoolId:
-          Ref: CognitoUserPoolApp
-        ExplicitAuthFlows:
-          - ALLOW_USER_PASSWORD_AUTH
-          - ALLOW_USER_SRP_AUTH
-          - ALLOW_REFRESH_TOKEN_AUTH
-        GenerateSecret: false
+    # CognitoUserPoolClientApp:
+    #   Type: AWS::Cognito::UserPoolClient
+    #   DependsOn: CognitoUserPoolApp
+    #   Properties:
+    #     ClientName: ${self:provider.environment.USER_POOL_APP_CLIENT}
+    #     UserPoolId:
+    #       Ref: CognitoUserPoolApp
+    #     ExplicitAuthFlows:
+    #       - ALLOW_USER_PASSWORD_AUTH
+    #       - ALLOW_USER_SRP_AUTH
+    #       - ALLOW_REFRESH_TOKEN_AUTH
+    #     GenerateSecret: false
 
-    CognitoUserPoolAdmin:
-      Type: AWS::Cognito::UserPool
-      DeletionPolicy: Retain
-      Properties:
-        UserPoolName: ${self:provider.environment.USER_POOL_ADMIN}
-        UsernameAttributes:
-          - email
-        AutoVerifiedAttributes:
-          - email
-        EmailConfiguration:
-          EmailSendingAccount: COGNITO_DEFAULT
-        EmailVerificationSubject: 'Your Confirmation Code'
-        EmailVerificationMessage: 'Your Confirmation Code is {####}.'
-        Schema:
-          - Name: email
-            AttributeDataType: String
-            Mutable: false
-            Required: true
-          - Name: lastName
-            AttributeDataType: String
-            Mutable: true
-            Required: false
-          - Name: type
-            AttributeDataType: String
-            Mutable: true
-            Required: false
-          - Name: primaryRole
-            AttributeDataType: String
-            Mutable: true
-            Required: false
-          - Name: organizationId
-            AttributeDataType: Number
-            Mutable: true
-            Required: false
-          - Name: userId
-            AttributeDataType: String
-            Mutable: false
-            Required: false
+    # CognitoUserPoolAdmin:
+    #   Type: AWS::Cognito::UserPool
+    #   DeletionPolicy: Retain
+    #   Properties:
+    #     UserPoolName: ${self:provider.environment.USER_POOL_ADMIN}
+    #     UsernameAttributes:
+    #       - email
+    #     AutoVerifiedAttributes:
+    #       - email
+    #     EmailConfiguration:
+    #       EmailSendingAccount: COGNITO_DEFAULT
+    #     EmailVerificationSubject: 'Your Confirmation Code'
+    #     EmailVerificationMessage: 'Your Confirmation Code is {####}.'
+    #     Schema:
+    #       - Name: email
+    #         AttributeDataType: String
+    #         Mutable: false
+    #         Required: true
+    #       - Name: lastName
+    #         AttributeDataType: String
+    #         Mutable: true
+    #         Required: false
+    #       - Name: type
+    #         AttributeDataType: String
+    #         Mutable: true
+    #         Required: false
+    #       - Name: primaryRole
+    #         AttributeDataType: String
+    #         Mutable: true
+    #         Required: false
+    #       - Name: organizationId
+    #         AttributeDataType: Number
+    #         Mutable: true
+    #         Required: false
+    #       - Name: userId
+    #         AttributeDataType: String
+    #         Mutable: false
+    #         Required: false
 
-    CognitoUserPoolClientAdmin:
-      Type: AWS::Cognito::UserPoolClient
-      DependsOn: CognitoUserPoolAdmin
-      Properties:
-        ClientName: ${self:provider.environment.USER_POOL_ADMIN_CLIENT}
-        UserPoolId:
-          Ref: CognitoUserPoolAdmin
-        ExplicitAuthFlows:
-          - ALLOW_USER_PASSWORD_AUTH
-          - ALLOW_USER_SRP_AUTH
-          - ALLOW_REFRESH_TOKEN_AUTH
-        GenerateSecret: false
+    # CognitoUserPoolClientAdmin:
+    #   Type: AWS::Cognito::UserPoolClient
+    #   DependsOn: CognitoUserPoolAdmin
+    #   Properties:
+    #     ClientName: ${self:provider.environment.USER_POOL_ADMIN_CLIENT}
+    #     UserPoolId:
+    #       Ref: CognitoUserPoolAdmin
+    #     ExplicitAuthFlows:
+    #       - ALLOW_USER_PASSWORD_AUTH
+    #       - ALLOW_USER_SRP_AUTH
+    #       - ALLOW_REFRESH_TOKEN_AUTH
+    #     GenerateSecret: false
 
     Vpc:
       Type: AWS::EC2::VPC
@@ -460,6 +460,7 @@ resources:
       Type: AWS::RDS::DBCluster
       Properties:
         DBClusterIdentifier: my-cluster
+        DBClusterInstanceClass: db.t3.micro # db.r6g.large add this when create dev env
         MasterUsername: admin
         MasterUserPassword: mypassword
         DatabaseName: mydatabase
