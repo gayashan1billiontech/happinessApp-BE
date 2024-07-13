@@ -425,6 +425,14 @@ resources:
         VpcId: 
           Ref: Vpc
 
+    PrivateSubnet3:
+      Type: AWS::EC2::Subnet
+      Properties:
+        AvailabilityZone: ap-south-1c
+        CidrBlock: 10.0.200.0/18
+        VpcId: 
+          Ref: Vpc
+
     DBSubnetGroup:
       Type: "AWS::RDS::DBSubnetGroup"
       Properties: 
@@ -433,6 +441,7 @@ resources:
         SubnetIds:
           - Ref: PrivateSubnet1
           - Ref: PrivateSubnet2
+          - Ref: PrivateSubnet3
 
     DatabaseVpcSecurityGroup:
       Type: "AWS::EC2::SecurityGroup"
