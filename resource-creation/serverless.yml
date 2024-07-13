@@ -425,31 +425,6 @@ resources:
         VpcId: 
           Ref: Vpc
 
-    Database:
-      Type: AWS::RDS::DBInstance
-      Properties:
-        DBClusterIdentifier: !Ref MyDBCluster
-        DBInstanceClass: db.t2.micro
-        Engine: aurora-mysql
-        EngineVersion: '8.0'
-        PubliclyAccessible: false
-
-    MyDBCluster:
-      Type: AWS::RDS::DBCluster
-      Properties:
-        DBClusterIdentifier: my-cluster
-        MasterUsername: admin
-        MasterUserPassword: mypassword
-        DatabaseName: mydatabase
-        Engine: aurora-mysql
-        EngineMode: provisioned
-        EngineVersion: '8.0'
-        DBSubnetGroupName: ${self:provider.environment.DB_SUBNET_GROUP}
-        DeletionProtection: true
-        CopyTagsToSnapshot: true
-        VpcSecurityGroupIds:
-          - !GetAtt DatabaseVpcSecurityGroup.GroupId
-
     DBSubnetGroup:
       Type: "AWS::RDS::DBSubnetGroup"
       Properties: 
@@ -471,3 +446,30 @@ resources:
             ToPort: 3306
         VpcId: 
           Ref: Vpc
+
+    MyDBCluster:
+      Type: AWS::RDS::DBCluster
+      Properties:
+        DBClusterIdentifier: my-cluster
+        MasterUsername: admin
+        MasterUserPassword: mypassword
+        DatabaseName: mydatabase
+        Engine: aurora-mysql
+        EngineMode: provisioned
+        EngineVersion: '8.0'
+        DBSubnetGroupName: !Ref DBSubnetGroup
+        DeletionProtection: true
+        CopyTagsToSnapshot: true
+        VpcSecurityGroupIds:
+          - !GetAtt DatabaseVpcSecurityGroup.GroupId
+
+    Database:
+      Type: AWS::RDS::DBInstance
+      Properties:
+        DBClusterIdentifier: !Ref MyDBCluster
+        DBInstanceClass: db.t2.micro
+        Engine: aurora-mysql
+        EngineVersion: '8.0'
+        PubliclyAccessible: false
+
+    
