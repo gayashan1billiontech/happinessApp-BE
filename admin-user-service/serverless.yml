@@ -16,8 +16,6 @@ provider:
     apiGateway: true
     lambda: true
   logRetentionInDays: 14
-  logs:
-    restApi: true
   environment:
     ENV_ID: ${file(../env.yml):${opt:stage}.envId}
     STAGE: ${self:provider.stage, 'dev'}
