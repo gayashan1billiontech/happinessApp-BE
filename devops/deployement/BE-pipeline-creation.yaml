@@ -212,7 +212,7 @@ Resources:
     CodeBuildCloudWatchLogsNotifications:
         Type: "AWS::IAM::ManagedPolicy"
         Properties:
-            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-notifications-${AWS::Region}"
+            ManagedPolicyName: !Sub "CodeBuildCloudWatchLogsPolicy-happ-notification-${AWS::Region}"
             Path: "/service-role/"
             PolicyDocument: !Sub |
                 {
@@ -221,8 +221,8 @@ Resources:
                         {
                             "Effect": "Allow",
                             "Resource": [
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_notifications_microservice",
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_notifications_microservice:*"
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_notification_microservice",
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:happ_notification_microservice:*"
                             ],
                             "Action": [
                                 "logs:CreateLogGroup",
@@ -382,7 +382,7 @@ Resources:
     CodeBuildBasePolicyNotifications:
         Type: "AWS::IAM::ManagedPolicy"
         Properties:
-            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-notifications-${AWS::Region}"
+            ManagedPolicyName: !Sub "CodeBuildBasePolicy-happ-notification-${AWS::Region}"
             Path: "/service-role/"
             PolicyDocument: !Sub |
                 {
@@ -391,8 +391,8 @@ Resources:
                         {
                             "Effect": "Allow",
                             "Resource": [
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-notifications-microservise",
-                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-notifications-microservise:*"
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-notification-microservise",
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/happ-notification-microservise:*"
                             ],
                             "Action": [
                                 "logs:CreateLogGroup",
@@ -422,7 +422,7 @@ Resources:
                                 "codebuild:BatchPutTestCases"
                             ],
                             "Resource": [
-                                "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/happ-notifications-*"
+                                "arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/happ-notification-*"
                             ]
                         }
                     ]
@@ -580,7 +580,7 @@ Resources:
           - CodeBuildBasePolicyNotifications
         Properties:
             Path: "/service-role/"
-            RoleName: !Sub "codebuild-happ-notifications-service-${AWS::Region}-role"
+            RoleName: !Sub "codebuild-happ-notification-service-${AWS::Region}-role"
             AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"codebuild.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
             MaxSessionDuration: 3600
             ManagedPolicyArns: 
@@ -753,7 +753,7 @@ Resources:
                 ImagePullCredentialsType: "CODEBUILD"
                 PrivilegedMode: false
                 Type: "LINUX_CONTAINER"
-            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-notifications-service-${AWS::Region}-role"
+            ServiceRole: !Sub "arn:aws:iam::${AWS::AccountId}:role/service-role/codebuild-happ-notification-service-${AWS::Region}-role"
             TimeoutInMinutes: 60
             QueuedTimeoutInMinutes: 480
             EncryptionKey: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3"
@@ -761,7 +761,7 @@ Resources:
             LogsConfig: 
                 CloudWatchLogs: 
                     Status: "ENABLED"
-                    GroupName: "happ_notifications_microservice"
+                    GroupName: "happ_notification_microservice"
                 S3Logs: 
                     Status: "DISABLED"
                     EncryptionDisabled: false
@@ -920,19 +920,19 @@ Resources:
                 Name: "Build_services"
                 Actions: 
                   - 
-                    Name: "happ-notifications-microservice"
+                    Name: "happ-notification-microservice"
                     ActionTypeId: 
                         Category: "Build"
                         Owner: "AWS"
                         Provider: "CodeBuild"
                         Version: "1"
                     Configuration: 
-                        ProjectName: "happ-notifications"
+                        ProjectName: "happ-notification"
                     InputArtifacts: 
                       - 
                         Name: "SourceArtifact"
                     Region: !Ref AWS::Region
-                    Namespace: "happ-notifications-microservice"
+                    Namespace: "happ-notification-microservice"
                     RunOrder: 1
 
                   - 
