@@ -111,4 +111,4 @@ resources:
                 - ':'
                 - Ref: AWS::AccountId
                 - ':userpool/'
-                - Fn::ImportValue: ${self:provider.stage}-UserPoolId
+                - Fn::ImportValue: ${self:provider.stage}-AdminUserPoolId

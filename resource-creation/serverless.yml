@@ -520,6 +520,30 @@ resources:
                 - ':'
                 - Ref: AWS::AccountId
                 - ':userpool/'
-                - Fn::ImportValue: ${self:provider.stage}-UserPoolId
+                - Fn::ImportValue: ${self:provider.stage}-AdminUserPoolId
 
+  Outputs:
+    AdminUserPoolId:
+      Value:
+        Ref: CognitoUserPoolAdmin
+      Export:
+        Name: ${self:provider.stage}-AdminUserPoolId
+
+    AdminUserPoolClientId:
+      Value:
+        Ref: CognitoUserPoolClientAdmin
+      Export:
+        Name: ${self:provider.stage}-AdminUserPoolClientId
+
+    AppUserPoolId:
+      Value:
+        Ref: CognitoUserPoolApp
+      Export:
+        Name: ${self:provider.stage}-AppUserPoolId
+
+    AppUserPoolClientId:
+      Value:
+        Ref: CognitoUserPoolClientApp
+      Export:
+        Name: ${self:provider.stage}-AppUserPoolClientId
     

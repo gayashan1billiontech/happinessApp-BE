@@ -63,6 +63,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  helloAdmin:
+    handler: route.helloAdmin
+    events:
+      - http:
+          path: /app-user/admin/hello
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizerAdmin
+
 
 plugins:
   - serverless-webpack
@@ -111,4 +123,25 @@ resources:
                 - ':'
                 - Ref: AWS::AccountId
                 - ':userpool/'
-                - Fn::ImportValue: ${self:provider.stage}-UserPoolId
+                - Fn::ImportValue: ${self:provider.stage}-AppUserPoolId
+
+    ApiGatewayAuthorizerAdmin:
+      DependsOn:
+        - ApiGatewayRestApi
+      Type: AWS::ApiGateway::Authorizer
+      Properties:
+        AuthorizerResultTtlInSeconds: 300
+        IdentitySource: method.request.header.Authorization
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        Type: COGNITO_USER_POOLS
+        Name: Authorizer
+        ProviderARNs:
+          - Fn::Join:
+              - ''
+              - - 'arn:aws:cognito-idp:'
+                - ${self:provider.region}
+                - ':'
+                - Ref: AWS::AccountId
+                - ':userpool/'
+                - Fn::ImportValue: ${self:provider.stage}-AdminUserPoolId

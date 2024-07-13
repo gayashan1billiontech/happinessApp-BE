@@ -64,7 +64,22 @@ functions:
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
-              Ref: ApiGatewayAuthorizer
+              Ref: ApiGatewayAuthorizerUser
+          throttling:
+            maxRequestsPerSecond: 10
+            maxConcurrentRequests: 10
+
+  createSurveyAdmin:
+    handler: route.createSurveyAdmin
+    events:
+      - http:
+          cors: true
+          method: post
+          path: /happ/v1/survey/admin/create
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizerAdmin
           throttling:
             maxRequestsPerSecond: 10
             maxConcurrentRequests: 10
@@ -98,7 +113,7 @@ resources:
         RestApiId:
           Ref: 'ApiGatewayRestApi'
 
-    ApiGatewayAuthorizer:
+    ApiGatewayAuthorizerUser:
       DependsOn:
         - ApiGatewayRestApi
       Type: AWS::ApiGateway::Authorizer
@@ -117,4 +132,25 @@ resources:
                 - ':'
                 - Ref: AWS::AccountId
                 - ':userpool/'
-                - Fn::ImportValue: ${self:provider.stage}-UserPoolId
+                - Fn::ImportValue: ${self:provider.stage}-AppUserPoolId
+
+    ApiGatewayAuthorizerAdmin:
+      DependsOn:
+        - ApiGatewayRestApi
+      Type: AWS::ApiGateway::Authorizer
+      Properties:
+        AuthorizerResultTtlInSeconds: 300
+        IdentitySource: method.request.header.Authorization
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        Type: COGNITO_USER_POOLS
+        Name: Authorizer
+        ProviderARNs:
+          - Fn::Join:
+              - ''
+              - - 'arn:aws:cognito-idp:'
+                - ${self:provider.region}
+                - ':'
+                - Ref: AWS::AccountId
+                - ':userpool/'
+                - Fn::ImportValue: ${self:provider.stage}-AdminUserPoolId
