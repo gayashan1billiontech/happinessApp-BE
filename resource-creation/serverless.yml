@@ -520,7 +520,7 @@ resources:
                 - ':'
                 - Ref: AWS::AccountId
                 - ':userpool/'
-                - Fn::ImportValue: ${self:provider.stage}-AdminUserPoolId
+                - Ref: CognitoUserPoolAdmin
 
   Outputs:
     AdminUserPoolId:
