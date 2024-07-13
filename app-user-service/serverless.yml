@@ -55,7 +55,7 @@ functions:
     handler: route.hello
     events:
       - http:
-          path: /admin-user/hello
+          path: /app-user/hello
           method: get
           cors: true
           authorizer:

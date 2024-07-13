@@ -53,21 +53,21 @@ custom:
     maxConcurrentRequests: 2000
    
 
-# functions:
-#   createSurvey:
-#     handler: route.createSurvey
-#     events:
-#       - http:
-#           cors: true
-#           method: post
-#           path: /happ/v1/survey/create
-#           authorizer:
-#             type: COGNITO_USER_POOLS
-#             authorizerId:
-#               Ref: ApiGatewayAuthorizer
-#           throttling:
-#             maxRequestsPerSecond: 10
-#             maxConcurrentRequests: 10
+functions:
+  createSurvey:
+    handler: route.createSurvey
+    events:
+      - http:
+          cors: true
+          method: post
+          path: /happ/v1/survey/create
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          throttling:
+            maxRequestsPerSecond: 10
+            maxConcurrentRequests: 10
 
 
 plugins:

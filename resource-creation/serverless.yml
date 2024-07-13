@@ -50,16 +50,6 @@ custom:
     number: 3
   warningThreshold: 100
    
-
-functions:
-  hello:
-    handler: route.hello
-    events:
-      - httpApi:
-          path: /resource-creation/hello
-          method: get
-
-
 plugins:
   - serverless-webpack
   - serverless-offline
