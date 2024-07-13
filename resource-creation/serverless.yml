@@ -457,7 +457,7 @@ resources:
         Engine: aurora-mysql
         EngineMode: provisioned
         EngineVersion: '8.0'
-        DBSubnetGroupName: PrivateDbSubnet
+        DBSubnetGroupName: !Ref DBSubnetGroup
         DeletionProtection: true
         CopyTagsToSnapshot: true
         VpcSecurityGroupIds:
@@ -468,6 +468,7 @@ resources:
       Properties:
         DBClusterIdentifier: !Ref MyDBCluster
         DBInstanceClass: db.t2.micro
+        DBSubnetGroupName: !Ref DBSubnetGroup
         Engine: aurora-mysql
         EngineVersion: '8.0'
         PubliclyAccessible: false
