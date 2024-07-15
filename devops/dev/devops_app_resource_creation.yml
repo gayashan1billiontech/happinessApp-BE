@@ -1,7 +1,8 @@
-version: 0.1
+version: 0.2
 
 env:
-  environment: "dev"
+  variables:
+    environment: "dev"
 
 phases:
   install:
@@ -9,20 +10,28 @@ phases:
       nodejs: 20
     commands:
       - echo installing API dependencies for resource-creation
+      - pwd
       - npm install -g serverless@3.39.0
       - echo finished installing API dependencies
       - echo copy libs files to module directory
+      - pwd
       - cp -r libs resource-creation
       - echo finished copying libs files to module directory
+      - pwd
       - sh libs/dependencies.sh
+      - pwd
       - cd resource-creation
+      - pwd
       - echo installing resource-creation API dependencies
       - npm install --silent
       - echo finished installing resource-creation API dependencies
+      - pwd
   build:
     commands:
       - export AWS_ACCESS_KEY_ID=$KEY
       - export AWS_SECRET_ACCESS_KEY=$VALUE
+      - pwd
       - echo deploying APIs for happ-ms-resource-creation
       - serverless deploy -s dev
       - echo finished deploying happ-ms-resource-creation
+      - pwd
